@@ -1,0 +1,13 @@
+Donut Teams
+Copyright 2026 Nightbeam Studio / NAIZO / MeherBenSalem
+
+This product is licensed All Rights Reserved. Lite and Pro editions are
+Nightbeam intellectual property. See LICENSE.
+
+This product includes software developed by Nightbeam Studio.
+Third-party dependencies retain their own licenses; see each dependency's
+project page for details.
+
+Soft-dependencies (DonutCore, Vault, LuckPerms, PlaceholderAPI) are not
+redistributed with this plugin. Bundled HikariCP, Caffeine, SQLite JDBC,
+MySQL Connector/J, and bStats are relocated and keep their upstream licenses.

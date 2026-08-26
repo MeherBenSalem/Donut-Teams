@@ -1,0 +1,146 @@
+prefix: "<dark_gray>[<gold><bold>DonutTeams</bold></gold>]</dark_gray> "
+
+general:
+  no-permission: "<red>You do not have permission to do that."
+  players-only: "<red>Only players can use this command."
+  unknown-subcommand: "<red>Unknown subcommand. Use <white>/team</white> for help."
+  reload: "<green>Donut Teams config and messages reloaded."
+  usage: "<gray>Usage: <white><usage>"
+  error: "<red>Something went wrong. Check console."
+  player-not-found: "<red>Player <white><player></white> is not online."
+  not-in-team: "<red>You are not in a team."
+  already-in-team: "<red>You are already in a team."
+  team-not-found: "<red>Team <white><team></white> was not found."
+  no-permission-team: "<red>Your team role cannot do that."
+  owner-only: "<red>Only the team owner can do that."
+  cancelled: "<red>Action cancelled."
+
+create:
+  usage: "/team create <name> [tag]"
+  created: "<green>Created team <white><team></white> <gray>[<white><tag></white>]</gray>."
+  exists: "<red>A team named <white><team></white> already exists."
+  invalid-name: "<red>Team names must be <white><min></white>–<white><max></white> letters, numbers, or underscores."
+  invalid-tag: "<red>Tags must be <white><min></white>–<white><max></white> letters or numbers."
+  no-permission: "<red>You cannot create a team."
+  prompt: "<gray>Type a team name in chat, or <white>cancel</white>."
+
+disband:
+  disbanded: "<red>Team <white><team></white> was disbanded."
+  confirm: "<yellow>Click again or run <white>/team disband confirm</white> to disband <white><team></white>."
+
+invite:
+  usage: "/team invite <player>"
+  sent: "<green>Invited <white><player></white> to <white><team></white>."
+  received: "<green><player></green> invited you to <white><team></white>. Use <white>/team join <team></white>."
+  already: "<red>That player is already invited or in a team."
+  self: "<red>You cannot invite yourself."
+  full: "<red>Your team is full (<white><max></white> members)."
+
+join:
+  usage: "/team join <team>"
+  joined: "<green><player></green> joined <white><team></white>."
+  no-invite: "<red>You do not have an invite to <white><team></white>."
+  expired: "<red>That invite has expired."
+  full: "<red>That team is full."
+
+leave:
+  left: "<yellow>You left <white><team></white>."
+  owner: "<red>Owners must <white>/team transfer</white> or <white>/team disband</white> first."
+  broadcast: "<yellow><player></yellow> left <white><team></white>."
+
+kick:
+  usage: "/team kick <player>"
+  kicked: "<red><player></red> was kicked from <white><team></white>."
+  target: "<red>You were kicked from <white><team></white>."
+  not-member: "<red>That player is not on your team."
+  cannot-owner: "<red>You cannot kick the owner."
+
+info:
+  header: "<gold><bold><team></bold></gold> <gray>[<white><tag></white>]</gray>"
+  owner: "<gray>Owner: <white><owner>"
+  members: "<gray>Members: <white><count></white>/<white><max>"
+  pvp: "<gray>Friendly fire: <white><state>"
+  home: "<gray>Home: <white><home>"
+  none: "<dark_gray>none"
+
+chat:
+  usage: "/team chat [message]"
+  enabled: "<green>Team chat enabled."
+  disabled: "<yellow>Team chat disabled."
+  format: "<dark_gray>[<gold><tag></gold>]</dark_gray> <white><player></white><dark_gray>:</dark_gray> <gray><message>"
+  no-speak: "<red>You do not have team chat permission."
+  empty: "<red>Your team has no one else online."
+
+home:
+  none: "<red>Your team has no home set."
+  warmup: "<yellow>Teleporting to team home in <white><seconds></white>s. Don't move."
+  actionbar: "<gold>Team home in <white><seconds></white>s"
+  teleported: "<green>Teleported to the team home."
+  cancelled-move: "<red>Teleport cancelled because you moved."
+  cancelled: "<red>Teleport cancelled."
+  invalid-world: "<red>The team home world is not loaded."
+  no-permission: "<red>You cannot use the team home."
+
+sethome:
+  set: "<green>Team home set."
+  no-permission: "<red>You cannot set the team home."
+
+delhome:
+  deleted: "<yellow>Team home removed."
+  none: "<red>Your team has no home to delete."
+  no-permission: "<red>You cannot delete the team home."
+
+pvp:
+  enabled: "<red>Friendly fire is now <white>ON</white>."
+  disabled: "<green>Friendly fire is now <white>OFF</white>."
+  no-permission: "<red>You cannot toggle team PvP."
+
+transfer:
+  usage: "/team transfer <player>"
+  transferred: "<green>Ownership of <white><team></white> transferred to <white><player></white>."
+  not-member: "<red>That player is not on your team."
+
+gui:
+  title-main: "<gold>Donut Teams"
+  title-members: "<gold>Team Members"
+  title-member: "<gold>Member · <white><player>"
+  title-invites: "<gold>Team Invites"
+  title-settings: "<gold>Team Settings"
+  filler-name: "<dark_gray> "
+  create-name: "<green>Create team"
+  create-lore:
+    - "<gray>Click, then type a name in chat"
+    - "<dark_gray>or use /team create <name>"
+  info-name: "<aqua>Team info"
+  members-name: "<yellow>Members"
+  invites-name: "<gold>Invites"
+  settings-name: "<white>Settings"
+  home-name: "<green>Team home"
+  sethome-name: "<aqua>Set home"
+  delhome-name: "<red>Delete home"
+  chat-name: "<light_purple>Team chat"
+  pvp-name: "<red>Friendly fire"
+  leave-name: "<red>Leave team"
+  disband-name: "<dark_red>Disband team"
+  back-name: "<gray>Back"
+  close-name: "<red>Close"
+  pvp-on: "<green>ON"
+  pvp-off: "<red>OFF"
+  chat-on: "<green>ON"
+  chat-off: "<gray>OFF"
+  home-set: "<green>Set"
+  home-unset: "<dark_gray>Not set"
+  owner-badge: "<gold>Owner"
+  member-badge: "<gray>Member"
+  toggle-perm: "<yellow>Click to toggle <white><perm>"
+  kick-name: "<red>Kick"
+  transfer-name: "<gold>Transfer ownership"
+  pro-locked: "<dark_gray>Pro"
+  pro-allies: "<gray>Allies / wars"
+  pro-bank: "<gray>Team bank"
+  pro-homes: "<gray>Extra / personal homes"
+  pro-cosmetics: "<gray>Nametags / tablist"
+  pro-lore: "<dark_gray>Coming in Donut Teams Pro"
+
+placeholders:
+  none: "none"
