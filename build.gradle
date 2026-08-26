@@ -59,13 +59,20 @@ processResources {
 shadowJar {
     archiveBaseName.set('DonutTeams')
     archiveClassifier.set('')
-    exclude 'META-INF/LICENSE'
     exclude 'META-INF/LICENSE.txt'
-    exclude 'META-INF/NOTICE'
     exclude 'META-INF/NOTICE.txt'
     exclude 'META-INF/*.SF'
     exclude 'META-INF/*.DSA'
     exclude 'META-INF/*.RSA'
+    exclude 'LICENSE'
+    exclude 'README'
+    exclude 'NOTICE'
+    from(rootProject.file('LICENSE')) {
+        into 'META-INF'
+    }
+    from(rootProject.file('NOTICE')) {
+        into 'META-INF'
+    }
     relocate 'com.zaxxer.hikari', 'io.nightbeam.donutteams.lib.hikari'
     relocate 'com.github.benmanes.caffeine', 'io.nightbeam.donutteams.lib.caffeine'
     relocate 'com.mysql', 'io.nightbeam.donutteams.lib.mysql'
