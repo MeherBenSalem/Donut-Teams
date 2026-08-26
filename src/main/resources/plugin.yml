@@ -1,0 +1,46 @@
+name: DonutTeams
+version: '${version}'
+main: io.nightbeam.donutteams.DonutTeamsPlugin
+api-version: '1.20'
+folia-supported: true
+authors:
+  - Nightbeam Studio
+website: https://nightbeam.cloud
+description: Folia-first team GUI, homes, chat, and friendly-fire for Paper.
+softdepend:
+  - DonutCore
+  - Vault
+  - LuckPerms
+  - PlaceholderAPI
+
+commands:
+  team:
+    description: Donut Teams GUI and subcommands.
+    usage: /team [create|disband|invite|join|leave|kick|info|chat|home|sethome|delhome|pvp|transfer]
+    aliases: [teams, dt]
+    permission: donutteams.use
+  donutteams:
+    description: Donut Teams admin commands.
+    usage: /donutteams reload
+    aliases: [dteams]
+    permission: donutteams.admin
+
+permissions:
+  donutteams.use:
+    description: Use /team and the team GUI.
+    default: true
+  donutteams.create:
+    description: Create a team.
+    default: true
+  donutteams.chat:
+    description: Use team chat.
+    default: true
+  donutteams.home:
+    description: Teleport to the team home.
+    default: true
+  donutteams.admin:
+    description: Reload Donut Teams and bypass admin checks.
+    default: op
+  donutteams.slots.8:
+    description: Team member cap of 8 (lite maximum).
+    default: true
