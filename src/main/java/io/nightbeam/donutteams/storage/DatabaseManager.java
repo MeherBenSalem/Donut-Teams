@@ -32,7 +32,9 @@ public final class DatabaseManager {
         hikari.setLeakDetectionThreshold(30_000L);
 
         if (type == DatabaseType.SQLITE) {
-            File file = new File(plugin.getDataFolder(), settings.sqliteFile());
+            File dataFolder = plugin.getDataFolder();
+            System.setProperty("org.sqlite.tmpdir", dataFolder.getAbsolutePath());
+            File file = new File(dataFolder, settings.sqliteFile());
             hikari.setDriverClassName("org.sqlite.JDBC");
             hikari.setJdbcUrl("jdbc:sqlite:" + file.getAbsolutePath());
             hikari.setMaximumPoolSize(1);

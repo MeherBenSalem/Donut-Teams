@@ -9,5 +9,6 @@ Third-party dependencies retain their own licenses; see each dependency's
 project page for details.
 
 Soft-dependencies (DonutCore, Vault, LuckPerms, PlaceholderAPI) are not
-redistributed with this plugin. Bundled HikariCP, Caffeine, SQLite JDBC,
-MySQL Connector/J, and bStats are relocated and keep their upstream licenses.
+redistributed with this plugin. Bundled HikariCP, Caffeine, MySQL Connector/J,
+and bStats are relocated; SQLite JDBC is bundled without relocation (JNI).
+All keep their upstream licenses.
