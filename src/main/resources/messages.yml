@@ -135,12 +135,12 @@ gui:
   toggle-perm: "<yellow>Click to toggle <white><perm>"
   kick-name: "<red>Kick"
   transfer-name: "<gold>Transfer ownership"
-  pro-locked: "<dark_gray>Pro"
+  pro-locked: "<dark_gray>NightTeams Pro"
   pro-allies: "<gray>Allies / wars"
   pro-bank: "<gray>Team bank"
   pro-homes: "<gray>Extra / personal homes"
   pro-cosmetics: "<gray>Nametags / tablist"
-  pro-lore: "<dark_gray>Coming in Donut Teams Pro"
+  pro-lore: "<dark_gray>Available in NightTeams Pro"
 
 placeholders:
   none: "none"

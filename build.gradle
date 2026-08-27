@@ -5,7 +5,7 @@ plugins {
 
 group = 'io.nightbeam'
 version = '1.0.0'
-description = 'Donut Teams lite — Folia-first team GUI, homes, chat, and PvP for Paper.'
+description = 'Donut Teams — Folia-first team GUI, homes, chat, and PvP for Paper (Apache-2.0).'
 
 java {
     toolchain {
@@ -38,8 +38,6 @@ dependencies {
     }
     implementation 'org.xerial:sqlite-jdbc:3.53.2.0:natives-linux'
     implementation 'org.xerial:sqlite-jdbc:3.53.2.0:natives-windows'
-    implementation 'com.mysql:mysql-connector-j:8.3.0'
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
     implementation 'org.bstats:bstats-bukkit:3.1.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
@@ -75,14 +73,16 @@ shadowJar {
     exclude 'LICENSE'
     exclude 'README'
     exclude 'NOTICE'
-    // Keep Linux/Windows x86_64 + aarch64 only; drop unused sqlite arches.
+    // Linux + Windows x86_64 only.
     exclude 'org/sqlite/native/Linux-Musl/**'
+    exclude 'org/sqlite/native/Linux/aarch64/**'
     exclude 'org/sqlite/native/Linux/arm/**'
     exclude 'org/sqlite/native/Linux/armv6/**'
     exclude 'org/sqlite/native/Linux/armv7/**'
     exclude 'org/sqlite/native/Linux/ppc64/**'
     exclude 'org/sqlite/native/Linux/riscv64/**'
     exclude 'org/sqlite/native/Linux/x86/**'
+    exclude 'org/sqlite/native/Windows/aarch64/**'
     exclude 'org/sqlite/native/Windows/armv7/**'
     exclude 'org/sqlite/native/Windows/x86/**'
     from(rootProject.file('LICENSE')) {
@@ -92,8 +92,6 @@ shadowJar {
         into 'META-INF'
     }
     relocate 'com.zaxxer.hikari', 'io.nightbeam.donutteams.lib.hikari'
-    relocate 'com.github.benmanes.caffeine', 'io.nightbeam.donutteams.lib.caffeine'
-    relocate 'com.mysql', 'io.nightbeam.donutteams.lib.mysql'
     relocate 'org.bstats', 'io.nightbeam.donutteams.lib.bstats'
 }
 

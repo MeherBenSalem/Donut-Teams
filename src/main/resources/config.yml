@@ -1,20 +1,13 @@
 # Donut Teams lite 1.0.0 — Nightbeam Studio
-# Pro keys below are stubs only. Lite ignores them.
+# Advanced features (Redis, multi-homes, allies, bank, cosmetics) ship in NightTeams Pro (separate repository).
 
 storage:
   type: SQLITE
   sqlite:
     file: teams.db
-  mysql:
-    host: localhost
-    port: 3306
-    database: donut_teams
-    username: root
-    password: password
-    parameters: useSSL=false&characterEncoding=utf8
 
 teams:
-  # Lite hard-caps at 8 even if a higher donutteams.slots.<n> node exists.
+  # Hard-caps at 8 even if a higher donutteams.slots.<n> node exists.
   default-max-members: 8
   lite-max-members: 8
   name-min: 3
@@ -26,7 +19,6 @@ teams:
 home:
   warmup-seconds: 3
   cancel-on-move: true
-  # One unnamed team home in lite. Personal homes are a future SKU.
 
 chat:
   enabled: true
@@ -37,24 +29,5 @@ pvp:
 
 metrics:
   enabled: true
-  # bStats plugin id is assigned after the Modrinth listing. 0 = stub / skip.
+  # bStats plugin id. 0 = stub / skip.
   bstats-id: 0
-
-# ---------------------------------------------------------------------------
-# Pro (not implemented in lite — reserved for the paid SKU)
-# ---------------------------------------------------------------------------
-pro:
-  redis:
-    enabled: false
-    host: localhost
-    port: 6379
-    password: ""
-    channel: donutteams:sync
-  extra-homes: false
-  extra-home-limit: 5
-  personal-homes: false
-  cosmetics: false
-  tablist: false
-  color-prefixes: false
-  allies: false
-  team-bank: false

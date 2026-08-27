@@ -35,3 +35,9 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Local / generated
+graphify-out/
+META-INF/
+out/
+*.class

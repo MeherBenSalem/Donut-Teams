@@ -53,8 +53,8 @@ public final class SettingsGui extends BaseGui {
     private org.bukkit.inventory.ItemStack locked(String path, String def) {
         return ItemBuilder.of(Material.GRAY_DYE, messages.component(path, def),
                 List.of(
-                        messages.component("gui.pro-locked", "<dark_gray>Pro"),
-                        messages.component("gui.pro-lore", "<dark_gray>Coming in Donut Teams Pro")));
+                        messages.component("gui.pro-locked", "<dark_gray>NightTeams Pro"),
+                        messages.component("gui.pro-lore", "<dark_gray>Available in NightTeams Pro")));
     }
 
     @Override

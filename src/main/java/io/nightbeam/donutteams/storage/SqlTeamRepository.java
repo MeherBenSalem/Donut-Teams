@@ -164,17 +164,11 @@ public final class SqlTeamRepository {
     }
 
     public void insertInvite(TeamInvite invite) throws SQLException {
-        String sql = type == DatabaseType.MYSQL
-                ? """
-                        INSERT INTO invites (team_id, player_uuid, invited_by, expires_at)
-                        VALUES (?, ?, ?, ?)
-                        ON DUPLICATE KEY UPDATE invited_by = VALUES(invited_by), expires_at = VALUES(expires_at)
-                        """
-                : """
-                        INSERT INTO invites (team_id, player_uuid, invited_by, expires_at)
-                        VALUES (?, ?, ?, ?)
-                        ON CONFLICT(team_id, player_uuid) DO UPDATE SET invited_by = excluded.invited_by, expires_at = excluded.expires_at
-                        """;
+        String sql = """
+                INSERT INTO invites (team_id, player_uuid, invited_by, expires_at)
+                VALUES (?, ?, ?, ?)
+                ON CONFLICT(team_id, player_uuid) DO UPDATE SET invited_by = excluded.invited_by, expires_at = excluded.expires_at
+                """;
         try (Connection connection = dataSource.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, invite.teamId().toString());

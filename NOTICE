@@ -1,14 +1,11 @@
 Donut Teams
 Copyright 2026 Nightbeam Studio / NAIZO / MeherBenSalem
 
-This product is licensed All Rights Reserved. Lite and Pro editions are
-Nightbeam intellectual property. See LICENSE.
+This product is licensed under the Apache License, Version 2.0.
 
-This product includes software developed by Nightbeam Studio.
-Third-party dependencies retain their own licenses; see each dependency's
-project page for details.
+This product bundles third-party software. Those components retain their
+own licenses:
 
-Soft-dependencies (DonutCore, Vault, LuckPerms, PlaceholderAPI) are not
-redistributed with this plugin. Bundled HikariCP, Caffeine, MySQL Connector/J,
-and bStats are relocated; SQLite JDBC is bundled without relocation (JNI).
-All keep their upstream licenses.
+- HikariCP (Apache License 2.0)
+- SQLite JDBC (Apache License 2.0)
+- bStats (MIT License)

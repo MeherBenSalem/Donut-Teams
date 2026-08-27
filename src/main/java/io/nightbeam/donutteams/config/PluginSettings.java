@@ -15,36 +15,8 @@ public final class PluginSettings {
         return plugin.getConfig();
     }
 
-    public String storageType() {
-        return yaml().getString("storage.type", "SQLITE");
-    }
-
     public String sqliteFile() {
         return yaml().getString("storage.sqlite.file", "teams.db");
-    }
-
-    public String mysqlHost() {
-        return yaml().getString("storage.mysql.host", "localhost");
-    }
-
-    public int mysqlPort() {
-        return yaml().getInt("storage.mysql.port", 3306);
-    }
-
-    public String mysqlDatabase() {
-        return yaml().getString("storage.mysql.database", "donut_teams");
-    }
-
-    public String mysqlUsername() {
-        return yaml().getString("storage.mysql.username", "root");
-    }
-
-    public String mysqlPassword() {
-        return yaml().getString("storage.mysql.password", "password");
-    }
-
-    public String mysqlParameters() {
-        return yaml().getString("storage.mysql.parameters", "useSSL=false&characterEncoding=utf8");
     }
 
     public int defaultMaxMembers() {

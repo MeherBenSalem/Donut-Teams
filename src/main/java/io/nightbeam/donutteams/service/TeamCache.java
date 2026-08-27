@@ -1,7 +1,5 @@
 package io.nightbeam.donutteams.service;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import io.nightbeam.donutteams.model.Team;
 import io.nightbeam.donutteams.model.TeamInvite;
 import io.nightbeam.donutteams.util.TeamNameValidator;
@@ -9,19 +7,16 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 public final class TeamCache {
 
-    private final Cache<UUID, Team> byId = Caffeine.newBuilder()
-            .expireAfterAccess(30, TimeUnit.MINUTES)
-            .build();
+    private final Map<UUID, Team> byId = new ConcurrentHashMap<>();
     private final Map<UUID, UUID> playerToTeam = new ConcurrentHashMap<>();
     private final Map<String, UUID> nameToTeam = new ConcurrentHashMap<>();
     private final Map<String, TeamInvite> invites = new ConcurrentHashMap<>();
 
     public void replaceAll(Collection<Team> teams, Collection<TeamInvite> loadedInvites) {
-        byId.invalidateAll();
+        byId.clear();
         playerToTeam.clear();
         nameToTeam.clear();
         invites.clear();
@@ -43,14 +38,14 @@ public final class TeamCache {
     }
 
     public void remove(Team team) {
-        byId.invalidate(team.id());
+        byId.remove(team.id());
         nameToTeam.remove(TeamNameValidator.nameKey(team.name()));
         team.members().forEach(member -> playerToTeam.remove(member.playerId(), team.id()));
         invites.entrySet().removeIf(entry -> entry.getValue().teamId().equals(team.id()));
     }
 
     public Team byId(UUID teamId) {
-        return teamId == null ? null : byId.getIfPresent(teamId);
+        return teamId == null ? null : byId.get(teamId);
     }
 
     public Team byPlayer(UUID playerId) {
@@ -92,7 +87,7 @@ public final class TeamCache {
     }
 
     public Collection<Team> teams() {
-        return byId.asMap().values();
+        return byId.values();
     }
 
     private static String inviteKey(UUID teamId, UUID playerId) {
