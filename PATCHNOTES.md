@@ -4,7 +4,8 @@
 
 ### Platform
 * Minecraft **26.3** support (Paper API `26.3.build.49-alpha`, the latest published 26.3 API artifact)
-* Folia 26.3 is not published yet
+* Boot-tested on Paper **26.3 ALPHA build #133**, Paper 26.2 build 129, Paper 1.20.6 build 151 (oldest supported), and Folia 26.2 build 7
+* Folia 26.3 is not published yet (Paper Fill API returns 404)
 * Existing support for 1.20.6–26.2, Folia, Bukkit, Spigot, and Purpur is unchanged (`api-version: 1.20`, `folia-supported: true`)
 * Sound lookups use the Paper registry with a reflective `valueOf` fallback (`Sound.valueOf` is deprecated for removal in 26.3)
 * Compile with JDK 25; the plugin jar still emits Java 21 bytecode
