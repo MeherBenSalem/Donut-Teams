@@ -94,7 +94,7 @@ public final class DonutTeamsPlugin extends JavaPlugin {
         registerPlaceholders();
         startMetrics();
 
-        getLogger().info("Donut Teams 1.0.0 enabled. Folia=" + scheduler.isFolia()
+        getLogger().info("Donut Teams " + getPluginMeta().getVersion() + " enabled. Folia=" + scheduler.isFolia()
                 + " storage=SQLITE"
                 + " DonutCore=" + donutCore.isAvailable()
                 + " LuckPerms=" + luckPerms.isAvailable()

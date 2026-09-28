@@ -4,13 +4,17 @@ plugins {
 }
 
 group = 'io.nightbeam'
-version = '1.0.0'
+version = '1.0.1'
 description = 'Donut Teams — Folia-first team GUI, homes, chat, and PvP for Paper (Apache-2.0).'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        // Paper 26.3 API is Java 25 bytecode; the plugin jar still targets 21.
+        languageVersion = JavaLanguageVersion.of(25)
     }
+    // paper-api 26.3 only publishes a JVM 25 variant. Keep resolving it even though
+    // we emit Java 21 bytecode for older Paper/Spigot servers.
+    disableAutoTargetJvm()
 }
 
 repositories {
@@ -26,7 +30,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT'
+    // Latest published 26.3 Paper API (26.3.build.49-alpha). Server builds exist
+    // through ALPHA #133; those later fills did not publish a newer API artifact.
+    compileOnly 'io.papermc.paper:paper-api:26.3.build.49-alpha'
     compileOnly 'me.clip:placeholderapi:2.11.6'
 
     implementation 'com.zaxxer:HikariCP:5.1.0'
@@ -41,18 +47,22 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:3.1.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation 'org.yaml:snakeyaml:2.2'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.release = 21
+    options.compilerArgs.add('-Xlint:removal')
 }
+
+def pluginVersion = version
 
 processResources {
     filteringCharset = 'UTF-8'
     filesMatching('plugin.yml') {
-        expand(version: project.version)
+        expand(version: pluginVersion)
     }
     from(rootProject.projectDir) {
         include 'LICENSE'

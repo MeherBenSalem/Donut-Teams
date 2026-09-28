@@ -16,58 +16,58 @@ public final class PluginSettings {
     }
 
     public String sqliteFile() {
-        return yaml().getString("storage.sqlite.file", "teams.db");
+        return yaml().getString(SettingsSnapshot.SQLITE_FILE, "teams.db");
     }
 
     public int defaultMaxMembers() {
-        return yaml().getInt("teams.default-max-members", 8);
+        return yaml().getInt(SettingsSnapshot.DEFAULT_MAX_MEMBERS, 8);
     }
 
     public int liteMaxMembers() {
-        return yaml().getInt("teams.lite-max-members", 8);
+        return yaml().getInt(SettingsSnapshot.LITE_MAX_MEMBERS, 8);
     }
 
     public int nameMin() {
-        return yaml().getInt("teams.name-min", 3);
+        return yaml().getInt(SettingsSnapshot.NAME_MIN, 3);
     }
 
     public int nameMax() {
-        return yaml().getInt("teams.name-max", 16);
+        return yaml().getInt(SettingsSnapshot.NAME_MAX, 16);
     }
 
     public int tagMin() {
-        return yaml().getInt("teams.tag-min", 2);
+        return yaml().getInt(SettingsSnapshot.TAG_MIN, 2);
     }
 
     public int tagMax() {
-        return yaml().getInt("teams.tag-max", 6);
+        return yaml().getInt(SettingsSnapshot.TAG_MAX, 6);
     }
 
     public int inviteExpireSeconds() {
-        return yaml().getInt("teams.invite-expire-seconds", 300);
+        return yaml().getInt(SettingsSnapshot.INVITE_EXPIRE_SECONDS, 300);
     }
 
     public int homeWarmupSeconds() {
-        return yaml().getInt("home.warmup-seconds", 3);
+        return yaml().getInt(SettingsSnapshot.HOME_WARMUP_SECONDS, 3);
     }
 
     public boolean cancelHomeOnMove() {
-        return yaml().getBoolean("home.cancel-on-move", true);
+        return yaml().getBoolean(SettingsSnapshot.HOME_CANCEL_ON_MOVE, true);
     }
 
     public boolean chatEnabled() {
-        return yaml().getBoolean("chat.enabled", true);
+        return yaml().getBoolean(SettingsSnapshot.CHAT_ENABLED, true);
     }
 
     public boolean defaultFriendlyFire() {
-        return yaml().getBoolean("pvp.default-friendly-fire", false);
+        return yaml().getBoolean(SettingsSnapshot.DEFAULT_FRIENDLY_FIRE, false);
     }
 
     public boolean metricsEnabled() {
-        return yaml().getBoolean("metrics.enabled", true);
+        return yaml().getBoolean(SettingsSnapshot.METRICS_ENABLED, true);
     }
 
     public int bstatsId() {
-        return yaml().getInt("metrics.bstats-id", 0);
+        return yaml().getInt(SettingsSnapshot.BSTATS_ID, 0);
     }
 }

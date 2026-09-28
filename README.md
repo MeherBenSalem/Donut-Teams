@@ -19,12 +19,13 @@ in a **separate** repository and is not part of this project.
 
 ## Requirements
 
-- Java 21
-- Paper 1.20.6+ / 1.21.x / 26.x, or Folia of the same game versions
+- Runtime: Java 21+ (Paper / Folia 26.x require Java 25)
+- Compile: JDK 25 (bytecode still targets Java 21)
+- Paper 1.20.6+ / 1.21.x / 26.1–26.3, or Folia of the same game versions (Folia 26.3 is not published yet)
 
 ## Installation
 
-1. Build or download `DonutTeams-1.0.0.jar`.
+1. Build or download `DonutTeams-1.0.1.jar`.
 2. Place it in `plugins/`.
 3. Restart the server.
 4. Edit `plugins/DonutTeams/config.yml` and `messages.yml` as needed.
@@ -66,7 +67,7 @@ Higher `donutteams.slots.<n>` nodes are parsed, but this edition hard-caps at
 ./gradlew build
 ```
 
-Shaded jar: `build/libs/DonutTeams-1.0.0.jar`
+Shaded jar: `build/libs/DonutTeams-1.0.1.jar`
 
 ## Contributing
 

@@ -17,7 +17,6 @@ import io.nightbeam.donutteams.model.TeamRole;
 import io.nightbeam.donutteams.model.TeamSettings;
 import io.nightbeam.donutteams.scheduler.FoliaScheduler;
 import io.nightbeam.donutteams.storage.SqlTeamRepository;
-import io.nightbeam.donutteams.util.TeamNameValidator;
 import java.sql.SQLException;
 import java.util.EnumSet;
 import java.util.Optional;
@@ -118,33 +117,22 @@ public final class TeamService {
     }
 
     public void create(Player player, String rawName, String rawTag) {
-        if (!player.hasPermission("donutteams.create")) {
-            messages.send(player, "create.no-permission", "<red>You cannot create a team.");
+        TeamRules.PreparedName prepared = TeamRules.prepareCreate(rawName, rawTag, settings.tagMax());
+        TeamRules.Denial denial = TeamRules.createDenial(
+                player.hasPermission("donutteams.create"),
+                cache.byPlayer(player.getUniqueId()) != null,
+                prepared,
+                cache.byName(prepared.name()) != null,
+                settings.nameMin(),
+                settings.nameMax(),
+                settings.tagMin(),
+                settings.tagMax());
+        if (denial != null) {
+            sendCreateDenial(player, denial, prepared.name());
             return;
         }
-        if (cache.byPlayer(player.getUniqueId()) != null) {
-            messages.send(player, "already-in-team", "<red>You are already in a team.");
-            return;
-        }
-        String name = TeamNameValidator.normalizeName(rawName);
-        String tag = TeamNameValidator.normalizeTag(rawTag == null || rawTag.isBlank() ? name : rawTag);
-        if (tag.length() > settings.tagMax()) {
-            tag = tag.substring(0, settings.tagMax());
-        }
-        if (!TeamNameValidator.validName(name, settings.nameMin(), settings.nameMax())) {
-            messages.send(player, "create.invalid-name", "<red>Invalid name.",
-                    "min", String.valueOf(settings.nameMin()), "max", String.valueOf(settings.nameMax()));
-            return;
-        }
-        if (!TeamNameValidator.validTag(tag, settings.tagMin(), settings.tagMax())) {
-            messages.send(player, "create.invalid-tag", "<red>Invalid tag.",
-                    "min", String.valueOf(settings.tagMin()), "max", String.valueOf(settings.tagMax()));
-            return;
-        }
-        if (cache.byName(name) != null) {
-            messages.send(player, "create.exists", "<red>Exists.", "team", name);
-            return;
-        }
+        String name = prepared.name();
+        String tag = prepared.tag();
         TeamCreateEvent event = new TeamCreateEvent(player, name, tag);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -202,21 +190,16 @@ public final class TeamService {
             return;
         }
         TeamMember member = team.member(player.getUniqueId());
-        if (member == null || !member.has(TeamPermission.INVITE)) {
-            messages.send(player, "no-permission-team", "<red>Your team role cannot do that.");
-            return;
-        }
-        if (target.getUniqueId().equals(player.getUniqueId())) {
-            messages.send(player, "invite.self", "<red>You cannot invite yourself.");
-            return;
-        }
-        if (cache.byPlayer(target.getUniqueId()) != null || cache.invite(team.id(), target.getUniqueId()) != null) {
-            messages.send(player, "invite.already", "<red>Already invited.");
-            return;
-        }
         int max = slots.maxMembers(team.ownerId());
-        if (team.size() >= max) {
-            messages.send(player, "invite.full", "<red>Full.", "max", String.valueOf(max));
+        TeamRules.Denial denial = TeamRules.inviteDenial(
+                true,
+                member != null && member.has(TeamPermission.INVITE),
+                target.getUniqueId().equals(player.getUniqueId()),
+                cache.byPlayer(target.getUniqueId()) != null || cache.invite(team.id(), target.getUniqueId()) != null,
+                team.size(),
+                max);
+        if (denial != null) {
+            sendInviteDenial(player, denial, max);
             return;
         }
         TeamInvite invite = new TeamInvite(
@@ -234,28 +217,25 @@ public final class TeamService {
     }
 
     public void join(Player player, String teamName) {
-        if (cache.byPlayer(player.getUniqueId()) != null) {
-            messages.send(player, "already-in-team", "<red>You are already in a team.");
-            return;
-        }
         Team team = cache.byName(teamName);
-        if (team == null) {
-            messages.send(player, "team-not-found", "<red>Not found.", "team", teamName);
+        TeamInvite invite = team == null ? null : cache.invite(team.id(), player.getUniqueId());
+        int max = team == null ? 0 : slots.maxMembers(team.ownerId());
+        TeamRules.Denial denial = TeamRules.joinDenial(
+                cache.byPlayer(player.getUniqueId()) != null,
+                team != null,
+                invite != null,
+                invite != null && invite.expired(),
+                team == null ? 0 : team.size(),
+                max);
+        if (denial != null) {
+            if (denial == TeamRules.Denial.INVITE_EXPIRED && team != null) {
+                cache.removeInvite(team.id(), player.getUniqueId());
+            }
+            sendJoinDenial(player, denial, teamName, team == null ? teamName : team.name());
             return;
         }
-        TeamInvite invite = cache.invite(team.id(), player.getUniqueId());
-        if (invite == null) {
-            messages.send(player, "join.no-invite", "<red>No invite.", "team", team.name());
-            return;
-        }
-        if (invite.expired()) {
-            cache.removeInvite(team.id(), player.getUniqueId());
-            messages.send(player, "join.expired", "<red>Expired.");
-            return;
-        }
-        int max = slots.maxMembers(team.ownerId());
-        if (team.size() >= max) {
-            messages.send(player, "join.full", "<red>Full.");
+        if (team == null || invite == null) {
+            messages.send(player, "error", "<red>Something went wrong.");
             return;
         }
         TeamJoinEvent event = new TeamJoinEvent(player, team.id(), team.name());
@@ -294,12 +274,16 @@ public final class TeamService {
     }
 
     public void leave(Player player) {
-        Team team = requireTeam(player);
-        if (team == null) {
+        Team team = cache.byPlayer(player.getUniqueId());
+        TeamRules.Denial denial = TeamRules.leaveDenial(
+                team != null,
+                team != null && team.ownerId().equals(player.getUniqueId()));
+        if (denial != null) {
+            sendLeaveDenial(player, denial);
             return;
         }
-        if (team.ownerId().equals(player.getUniqueId())) {
-            messages.send(player, "leave.owner", "<red>Transfer or disband first.");
+        if (team == null) {
+            messages.send(player, "not-in-team", "<red>You are not in a team.");
             return;
         }
         TeamLeaveEvent event = new TeamLeaveEvent(player, player.getUniqueId(), team.id(), team.name(), TeamLeaveEvent.Reason.LEAVE);
@@ -551,6 +535,49 @@ public final class TeamService {
             }
         }
         return null;
+    }
+
+    private void sendCreateDenial(Player player, TeamRules.Denial denial, String name) {
+        switch (denial) {
+            case NO_CREATE_PERMISSION -> messages.send(player, "create.no-permission", "<red>You cannot create a team.");
+            case ALREADY_IN_TEAM -> messages.send(player, "already-in-team", "<red>You are already in a team.");
+            case INVALID_NAME -> messages.send(player, "create.invalid-name", "<red>Invalid name.",
+                    "min", String.valueOf(settings.nameMin()), "max", String.valueOf(settings.nameMax()));
+            case INVALID_TAG -> messages.send(player, "create.invalid-tag", "<red>Invalid tag.",
+                    "min", String.valueOf(settings.tagMin()), "max", String.valueOf(settings.tagMax()));
+            case NAME_TAKEN -> messages.send(player, "create.exists", "<red>Exists.", "team", name);
+            default -> messages.send(player, "error", "<red>Something went wrong.");
+        }
+    }
+
+    private void sendInviteDenial(Player player, TeamRules.Denial denial, int max) {
+        switch (denial) {
+            case NOT_IN_TEAM -> messages.send(player, "not-in-team", "<red>You are not in a team.");
+            case NO_INVITE_PERMISSION -> messages.send(player, "no-permission-team", "<red>Your team role cannot do that.");
+            case INVITE_SELF -> messages.send(player, "invite.self", "<red>You cannot invite yourself.");
+            case ALREADY_INVITED_OR_MEMBER -> messages.send(player, "invite.already", "<red>Already invited.");
+            case TEAM_FULL -> messages.send(player, "invite.full", "<red>Full.", "max", String.valueOf(max));
+            default -> messages.send(player, "error", "<red>Something went wrong.");
+        }
+    }
+
+    private void sendJoinDenial(Player player, TeamRules.Denial denial, String requestedName, String teamName) {
+        switch (denial) {
+            case ALREADY_IN_TEAM -> messages.send(player, "already-in-team", "<red>You are already in a team.");
+            case TEAM_NOT_FOUND -> messages.send(player, "team-not-found", "<red>Not found.", "team", requestedName);
+            case NO_INVITE -> messages.send(player, "join.no-invite", "<red>No invite.", "team", teamName);
+            case INVITE_EXPIRED -> messages.send(player, "join.expired", "<red>Expired.");
+            case TEAM_FULL -> messages.send(player, "join.full", "<red>Full.");
+            default -> messages.send(player, "error", "<red>Something went wrong.");
+        }
+    }
+
+    private void sendLeaveDenial(Player player, TeamRules.Denial denial) {
+        switch (denial) {
+            case NOT_IN_TEAM -> messages.send(player, "not-in-team", "<red>You are not in a team.");
+            case OWNER_CANNOT_LEAVE -> messages.send(player, "leave.owner", "<red>Transfer or disband first.");
+            default -> messages.send(player, "error", "<red>Something went wrong.");
+        }
     }
 
     private Team requireTeam(Player player) {
