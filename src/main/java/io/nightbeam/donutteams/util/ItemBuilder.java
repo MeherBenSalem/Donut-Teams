@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 public final class ItemBuilder {
 
     private static final Method GLINT_OVERRIDE = findGlintOverride();
+    private static final Method HIDE_TOOLTIP = find("setHideTooltip", boolean.class);
 
     private ItemBuilder() {
     }
@@ -51,17 +52,35 @@ public final class ItemBuilder {
         return item;
     }
 
+    /** A copy of {@code item} with the enchantment glint when {@code glow} is true. */
+    public static ItemStack glowing(ItemStack item, boolean glow) {
+        if (!glow) {
+            return item;
+        }
+        ItemStack copy = item.clone();
+        copy.editMeta(ItemBuilder::glow);
+        return copy;
+    }
+
     public static ItemStack head(UUID playerId) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         item.editMeta(SkullMeta.class, meta -> meta.setOwningPlayer(Bukkit.getOfflinePlayer(playerId)));
         return item;
     }
 
+    /** A background item. From 1.20.5 its tooltip is hidden, so hovering it shows no empty box. */
     public static ItemStack filler(Material material, Component name) {
         ItemStack item = new ItemStack(material);
         item.editMeta(meta -> {
             meta.displayName(Messages.item(name));
             meta.addItemFlags(ItemFlag.values());
+            if (HIDE_TOOLTIP != null) {
+                try {
+                    HIDE_TOOLTIP.invoke(meta, true);
+                } catch (ReflectiveOperationException ignored) {
+                    // The blank name stays.
+                }
+            }
         });
         return item;
     }
@@ -87,8 +106,13 @@ public final class ItemBuilder {
 
     /** {@code ItemMeta#setEnchantmentGlintOverride} exists from 1.20.5. */
     private static Method findGlintOverride() {
+        return find("setEnchantmentGlintOverride", Boolean.class);
+    }
+
+    /** An {@code ItemMeta} method that newer APIs have, or null. */
+    private static Method find(String name, Class<?> parameter) {
         try {
-            return ItemMeta.class.getMethod("setEnchantmentGlintOverride", Boolean.class);
+            return ItemMeta.class.getMethod(name, parameter);
         } catch (NoSuchMethodException ignored) {
             return null;
         }

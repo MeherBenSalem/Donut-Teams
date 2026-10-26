@@ -116,6 +116,8 @@ leaderboard:
   # In-world boards (/donutteams board create <name> <stat>).
   board-refresh-seconds: 30
   board-rows: 10
+  # Size of the boards' text (1 = vanilla text size).
+  board-scale: 1.5
 
 notifications:
   # Tell teammates when a member joins or leaves the server.

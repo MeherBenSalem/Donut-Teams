@@ -65,7 +65,7 @@ public final class PaperDialogs implements InputService.Dialogs {
         Dialog dialog = Dialog.create(factory -> factory.empty()
                 .base(DialogBase.builder(messages.render(messages.raw("dialog.create-title")))
                         .canCloseWithEscape(true)
-                        .body(List.of(DialogBody.plainMessage(messages.component("prompt.create"), 300)))
+                        .body(List.of(DialogBody.plainMessage(messages.render(messages.raw("dialog.create-body")), 300)))
                         .inputs(List.of(
                                 DialogInput.text("name", messages.render(messages.raw("dialog.create-name")))
                                         .maxLength(settings.nameMax).width(260).build(),

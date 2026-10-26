@@ -284,6 +284,7 @@ prompt:
 
 dialog:
   create-title: "Create a team"
+  create-body: "<gray>Pick a name for your team, and a short tag to show in chat."
   create-name: "Team name"
   create-tag: "Tag (optional)"
   confirm: "Create"

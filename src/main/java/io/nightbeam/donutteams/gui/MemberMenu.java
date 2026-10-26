@@ -8,7 +8,6 @@ import io.nightbeam.donutteams.model.TeamRole;
 import io.nightbeam.donutteams.util.ItemBuilder;
 import java.util.List;
 import java.util.UUID;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -70,13 +69,13 @@ final class MemberMenu extends Menu {
                 for (int i = 0; i < permissions.length && i < slots.size(); i++) {
                     TeamPermission permission = permissions[i];
                     boolean on = target.has(permission);
-                    ItemStack base = new ItemStack(on ? Material.LIME_DYE : Material.GRAY_DYE);
-                    set(slots.get(i), render(spec, base,
+                    ItemStack base = new ItemStack(Icons.permission(permission));
+                    set(slots.get(i), ItemBuilder.glowing(render(spec, base,
                             "perm_name", net.kyori.adventure.text.Component.text(format().permission(permission),
                                     on ? net.kyori.adventure.text.format.NamedTextColor.GREEN
                                             : net.kyori.adventure.text.format.NamedTextColor.GRAY),
                             "perm_description", messages().raw("permissions." + permission.key() + ".description"),
-                            "state", format().onOffComponent(on)), (type, slot) -> {
+                            "state", format().onOffComponent(on)), on), (type, slot) -> {
                                 teams().togglePermission(viewer, targetId, permission);
                                 redraw();
                             });

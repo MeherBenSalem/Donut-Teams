@@ -25,6 +25,8 @@ import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Transformation;
+import org.joml.Vector3f;
 
 /**
  * Top-teams boards standing in the world: one text display per board, no hologram plugin needed. Displays are not
@@ -162,6 +164,12 @@ public final class BoardService {
                 spawned.getPersistentDataContainer().set(key, PersistentDataType.STRING, board.name());
             });
             entities.put(id, display.getUniqueId());
+        }
+        float scale = plugin.settings().boardScale;
+        Transformation now = display.getTransformation();
+        if (now.getScale().x() != scale) {
+            display.setTransformation(new Transformation(now.getTranslation(), now.getLeftRotation(),
+                    new Vector3f(scale, scale, scale), now.getRightRotation()));
         }
         display.text(render(board.stat()));
     }

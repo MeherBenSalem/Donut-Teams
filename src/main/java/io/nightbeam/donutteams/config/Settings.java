@@ -75,6 +75,7 @@ public final class Settings {
     public final int leaderboardRefreshSeconds;
     public final int boardRefreshSeconds;
     public final int boardRows;
+    public final float boardScale;
 
     public final boolean notifyOnline;
     public final boolean notifyOffline;
@@ -152,6 +153,7 @@ public final class Settings {
         leaderboardRefreshSeconds = Math.max(5, c.getInt("leaderboard.refresh-seconds", 30));
         boardRefreshSeconds = Math.max(5, c.getInt("leaderboard.board-refresh-seconds", 30));
         boardRows = Math.max(1, Math.min(20, c.getInt("leaderboard.board-rows", 10)));
+        boardScale = (float) Math.max(0.25, Math.min(5.0, c.getDouble("leaderboard.board-scale", 1.5)));
 
         notifyOnline = c.getBoolean("notifications.member-online", true);
         notifyOffline = c.getBoolean("notifications.member-offline", true);
