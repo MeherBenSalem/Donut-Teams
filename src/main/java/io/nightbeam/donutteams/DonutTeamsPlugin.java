@@ -151,7 +151,8 @@ public final class DonutTeamsPlugin extends JavaPlugin {
             getLogger().info("Your 1.x teams, members, invites and homes were kept. The old home is now called \"home\".");
         }
         getLogger().info("Donut Teams " + getPluginMeta().getVersion() + " enabled on " + platform() + ": " + cache.size()
-                + " teams, storage " + storageName() + ", economy " + (economy.available() ? economy.name() : "none")
+                + (cache.size() == 1 ? " team" : " teams") + ", storage " + storageName()
+                + ", economy " + (economy.available() ? economy.name() : "none")
                 + ", dialogs " + input.dialogsAvailable() + ", PlaceholderAPI " + HookManager.present("PlaceholderAPI")
                 + ", LuckPerms contexts " + (luckPermsContexts != null)
                 + ", DonutCore " + donutCore.isAvailable() + ".");

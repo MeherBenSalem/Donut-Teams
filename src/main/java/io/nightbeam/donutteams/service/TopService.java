@@ -89,6 +89,7 @@ public final class TopService {
                 return i + 1;
             }
         }
-        return 0;
+        // A team made since the last refresh has nothing to its name yet: it comes last until then.
+        return cache.byId(teamId) != null ? list.size() + 1 : 0;
     }
 }

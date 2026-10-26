@@ -51,7 +51,7 @@ over.
 * Player kills and deaths count for the team (teammates and allies don't count). KDR on every team.
 * `/team top`: leaderboards by kills, bank, level or members.
 * **Top-teams boards in the world**: `/donutteams board create spawn kills`. A floating board that updates itself, no
-  hologram plugin needed.
+  hologram plugin needed; `leaderboard.board-scale` sets its size.
 * `/team list`: every team, busiest first, with a profile for each (members, relation, join or diplomacy buttons).
 
 ### Team identity

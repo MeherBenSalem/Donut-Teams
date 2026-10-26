@@ -117,7 +117,8 @@ public final class TeamService {
                 }
             }
             repository.meta("v1_permissions_granted", "1");
-            plugin.getLogger().info("Gave " + upgraded + " members from 1.x the 2.0 permissions of their rank.");
+            plugin.getLogger().info("Gave " + upgraded + (upgraded == 1 ? " member" : " members")
+                    + " from 1.x the 2.0 permissions of their rank.");
         }
     }
 
