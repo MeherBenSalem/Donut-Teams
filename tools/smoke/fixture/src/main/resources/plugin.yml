@@ -1,0 +1,15 @@
+name: TeamLabFixture
+version: 1.0.0
+main: io.nightbeam.teamlab.TeamLabPlugin
+api-version: '1.20'
+folia-supported: true
+description: Test-only fixture for the Donut Teams smoke matrix. Never install on a real server.
+softdepend: [Vault, VaultUnlocked, PlaceholderAPI]
+loadbefore: [DonutTeams]
+commands:
+  teamlab:
+    description: Smoke-test helpers.
+    permission: teamlab.admin
+permissions:
+  teamlab.admin:
+    default: op

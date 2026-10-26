@@ -1,0 +1,34 @@
+// Test-only server fixture for the smoke matrix: an in-memory Vault economy, console helpers and an API listener.
+// Never shipped; see tools/smoke/README.md. Build the plugin first (the fixture compiles against its jar).
+plugins {
+    id 'java'
+}
+
+repositories {
+    maven { url = 'https://repo.papermc.io/repository/maven-public/' }
+    mavenCentral()
+    maven {
+        url = 'https://repo.extendedclip.com/releases/'
+        content { includeGroup 'me.clip' }
+    }
+    maven {
+        url = 'https://jitpack.io'
+        content { includeGroup 'com.github.MilkBowl' }
+    }
+}
+
+dependencies {
+    compileOnly 'io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT'
+    compileOnly('com.github.MilkBowl:VaultAPI:1.7') { transitive = false }
+    compileOnly 'me.clip:placeholderapi:2.11.6'
+    compileOnly files("../../../build/libs/DonutTeams-${findProperty('donutteams.version') ?: '2.0.0'}.jar")
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+jar {
+    archiveFileName.set('TeamLabFixture.jar')
+}
