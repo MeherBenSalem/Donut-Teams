@@ -9,7 +9,10 @@
 #   CURSEFORGE_ID
 #
 # Usage after a release build is ready:
-#   git tag v1.0.1 && git push --tags
+#   git tag v2.0.0 && git push --tags
+#
+# Loaders and Minecraft versions come from release/supported-minecraft.json; the changelog is
+# DonutTeams-<version>-PatchNotes.md when it exists, else PATCHNOTES.md.
 
 name: Publish
 
@@ -107,15 +110,11 @@ jobs:
           const doModrinth = platforms === 'both' || platforms === 'modrinth';
           const doCurse = platforms === 'both' || platforms === 'curseforge';
           const jars = process.env.JAR_LIST.split(/\n/).map(s => s.trim()).filter(Boolean);
-          const PLUGIN_LOADERS = ['bukkit', 'spigot', 'paper', 'purpur', 'folia'];
-          const PLUGIN_GAME_VERSIONS = [
-            '1.20.1', '1.20.2', '1.20.3', '1.20.4', '1.20.5', '1.20.6',
-            '1.21', '1.21.1', '1.21.2', '1.21.3', '1.21.4', '1.21.5', '1.21.6',
-            '1.21.7', '1.21.8', '1.21.9', '1.21.10', '1.21.11',
-            '26.1', '26.1.1', '26.1.2', '26.2', '26.3',
-          ];
+          const support = JSON.parse(fs.readFileSync('release/supported-minecraft.json', 'utf8'));
+          const PLUGIN_LOADERS = support.loaders;
+          const PLUGIN_GAME_VERSIONS = support.game_versions;
           let changelog = `Release ${version}`;
-          for (const f of ['PATCHNOTES.md', 'PATCH_NOTES.md']) {
+          for (const f of [`DonutTeams-${version}-PatchNotes.md`, 'PATCHNOTES.md', 'PATCH_NOTES.md']) {
             if (fs.existsSync(f)) { changelog = fs.readFileSync(f, 'utf8'); break; }
           }
 
@@ -162,9 +161,10 @@ jobs:
             }
 
             for (const jar of jars) {
+              // CurseForge files Paper plugins under Bukkit; the platform tags follow the supported loaders.
               const gameVersionNames = [
                 ...PLUGIN_GAME_VERSIONS,
-                'Bukkit', 'Spigot', 'Paper', 'Purpur', 'Folia',
+                'Bukkit', ...PLUGIN_LOADERS.map((l) => l.charAt(0).toUpperCase() + l.slice(1)),
               ];
               const meta = {
                 changelog,

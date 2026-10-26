@@ -8,4 +8,6 @@ own licenses:
 
 - HikariCP (Apache License 2.0)
 - SQLite JDBC (Apache License 2.0)
+- MariaDB Connector/J (GNU Lesser General Public License 2.1), bundled
+  unmodified; its source is at https://github.com/mariadb-corporation/mariadb-connector-j
 - bStats (MIT License)

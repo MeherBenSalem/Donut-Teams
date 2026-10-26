@@ -10,23 +10,23 @@ import org.junit.jupiter.api.Test;
 class SlotPermissionParserTest {
 
     @Test
-    void parsesHighestSlotAndAppliesLiteCap() {
-        int value = SlotPermissionParser.parseHighest(
-                Set.of("donutteams.use", "donutteams.slots.4", "donutteams.slots.8", "donutteams.slots.16"),
-                8,
-                8);
-        assertEquals(8, value);
+    void findsTheHighestSlotNode() {
+        assertEquals(16, SlotPermissionParser.highest(Set.of("donutteams.use", "donutteams.slots.4", "donutteams.slots.16")));
+        assertEquals(0, SlotPermissionParser.highest(Set.of("donutteams.use")));
     }
 
     @Test
-    void usesDefaultWhenNoSlotNodes() {
-        assertEquals(8, SlotPermissionParser.parseHighest(Set.of("donutteams.use"), 8, 8));
+    void capRaisesTheLevelCapButNeverPassesTheHardCap() {
+        assertEquals(8, SlotPermissionParser.cap(8, 0, 50));
+        assertEquals(16, SlotPermissionParser.cap(8, 16, 50));
+        assertEquals(10, SlotPermissionParser.cap(10, 4, 50));
+        assertEquals(50, SlotPermissionParser.cap(8, 500, 50));
     }
 
     @Test
     void ignoresMalformedNodes() {
         assertTrue(SlotPermissionParser.isSlotNode("donutteams.slots.8"));
         assertFalse(SlotPermissionParser.isSlotNode("donutteams.slots.unlimited"));
-        assertEquals(8, SlotPermissionParser.parseHighest(Set.of("donutteams.slots.abc"), 8, 8));
+        assertEquals(0, SlotPermissionParser.highest(Set.of("donutteams.slots.abc")));
     }
 }

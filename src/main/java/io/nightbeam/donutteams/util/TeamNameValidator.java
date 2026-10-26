@@ -1,12 +1,13 @@
 package io.nightbeam.donutteams.util;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
 public final class TeamNameValidator {
 
-    private static final Pattern NAME = Pattern.compile("^[A-Za-z0-9_]{3,16}$");
-    private static final Pattern TAG = Pattern.compile("^[A-Za-z0-9]{2,6}$");
+    private static final Pattern NAME = Pattern.compile("^[A-Za-z0-9_]+$");
+    private static final Pattern TAG = Pattern.compile("^[A-Za-z0-9]+$");
 
     private TeamNameValidator() {
     }
@@ -31,6 +32,30 @@ public final class TeamNameValidator {
             return false;
         }
         return TAG.matcher(trimmed).matches();
+    }
+
+    /** Whether a name or tag contains a blocked word (case-insensitive, ignoring underscores). */
+    public static boolean blocked(String value, Collection<String> blockedWords) {
+        if (value == null || blockedWords == null || blockedWords.isEmpty()) {
+            return false;
+        }
+        String flat = value.toLowerCase(Locale.ROOT).replace("_", "");
+        for (String word : blockedWords) {
+            if (word == null || word.isBlank()) {
+                continue;
+            }
+            if (flat.contains(word.toLowerCase(Locale.ROOT).replace("_", "").trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** A tag derived from a team name: its letters and digits, cut to {@code max}. */
+    public static String tagFromName(String name, int max) {
+        String letters = name == null ? "" : name.replaceAll("[^A-Za-z0-9]", "");
+        int limit = Math.max(1, max);
+        return letters.length() > limit ? letters.substring(0, limit) : letters;
     }
 
     public static String normalizeName(String name) {

@@ -2,46 +2,23 @@ package io.nightbeam.donutteams.api.event;
 
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public final class TeamJoinEvent extends Event implements Cancellable {
+/** A player is about to join a team (invite, open team, accepted request or admin). Cancel to stop it. */
+public final class TeamJoinEvent extends CancellableTeamEvent {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final Player player;
-    private final UUID teamId;
-    private final String teamName;
-    private boolean cancelled;
 
     public TeamJoinEvent(Player player, UUID teamId, String teamName) {
+        super(teamId, teamName);
         this.player = player;
-        this.teamId = teamId;
-        this.teamName = teamName;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    public UUID getTeamId() {
-        return teamId;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 
     @Override

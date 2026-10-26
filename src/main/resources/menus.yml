@@ -1,0 +1,527 @@
+# Donut Teams 2.0 menus. Every title, slot, item and line of text can be changed here.
+#
+#  slot / slots     where an item goes (0 = top left, 8 = top right, 9 = second row...). Ranges like "10-16" work.
+#  material         any item name. Special values: TEAM_ICON (the team's banner or icon), PLAYER_HEAD (the viewer),
+#                   TEAM_DYE (the dye of the team colour).
+#  name / lore      MiniMessage (or & codes). Placeholders such as <team>, <members>, <balance> are filled in;
+#                   the README lists them per menu.
+#  content          slots that list things (members, homes, teams...). Lists longer than this get pages.
+#  Remove an item (or set its slot to -1) to hide it.
+menus-version: 2
+
+filler:
+  material: GRAY_STAINED_GLASS_PANE
+  name: " "
+
+common:
+  previous: {material: ARROW, name: "<white>Previous page", lore: ["<gray>Page <page>/<pages>"]}
+  next: {material: ARROW, name: "<white>Next page", lore: ["<gray>Page <page>/<pages>"]}
+  back: {material: DARK_OAK_DOOR, name: "<gray>Back"}
+  close: {material: BARRIER, name: "<red>Close"}
+  empty: {material: GRAY_DYE, name: "<gray>Nothing here yet"}
+
+no-team:
+  title: "<dark_gray>Teams"
+  rows: 3
+  items:
+    create:
+      slot: 11
+      material: NETHER_STAR
+      name: "<#49d6a0><bold>Create a team"
+      lore:
+        - "<gray>Start your own team: invite friends,"
+        - "<gray>share homes, a bank and a chest."
+        - ""
+        - "<yellow>Click to name your team"
+    invites:
+      slot: 13
+      material: WRITABLE_BOOK
+      name: "<gold><bold>Your invites <gray>(<white><count></white>)"
+      lore:
+        - "<gray>Teams that invited you."
+        - ""
+        - "<yellow>Click to view"
+    browse:
+      slot: 15
+      material: COMPASS
+      name: "<aqua><bold>Browse teams"
+      lore:
+        - "<gray>Find a team to join or ask."
+        - "<gray>There are <white><teams></white> teams."
+        - ""
+        - "<yellow>Click to browse"
+    top:
+      slot: 22
+      material: GOLD_INGOT
+      name: "<gold><bold>Top teams"
+      lore: ["<gray>The best teams on the server.", "", "<yellow>Click to view"]
+
+main:
+  title: "<dark_gray>Team · <team_display>"
+  rows: 6
+  items:
+    info:
+      slot: 4
+      material: TEAM_ICON
+      name: "<team_display> <tag_display>"
+      lore:
+        - "<gray><italic><description>"
+        - ""
+        - "<gray>Owner <white><owner>"
+        - "<gray>Level <white><level></white>/<white><max_level>"
+        - "<gray>Members <white><members></white>/<white><max_members></white> <dark_gray>(<green><online> online</green>)"
+        - "<gray>Kills <white><kills></white> · KDR <white><kdr>"
+        - "<gray>Bank <green><balance>"
+        - "<gray>Rank <white>#<rank_kills></white> by kills"
+        - ""
+        - "<gray>You are <role>"
+    members:
+      slot: 19
+      material: PLAYER_HEAD
+      name: "<yellow><bold>Members"
+      lore: ["<gray><white><members></white>/<white><max_members></white> members, <green><online> online", "", "<yellow>Click to manage"]
+    homes:
+      slot: 21
+      material: RED_BED
+      name: "<green><bold>Team homes"
+      lore: ["<gray><white><homes></white>/<white><max_homes></white> homes", "", "<yellow>Click to teleport or manage"]
+    bank:
+      slot: 23
+      material: GOLD_INGOT
+      name: "<gold><bold>Team bank"
+      lore: ["<gray>Balance: <green><balance>", "", "<yellow>Click to deposit or withdraw"]
+    chest:
+      slot: 25
+      material: ENDER_CHEST
+      name: "<light_purple><bold>Team chest"
+      lore: ["<gray><white><chest_rows></white> rows shared by the team", "", "<yellow>Click to open"]
+    relations:
+      slot: 29
+      material: SHIELD
+      name: "<aqua><bold>Allies & enemies"
+      lore: ["<gray>Allies <aqua><allies></aqua> · Enemies <red><enemies>", "", "<yellow>Click to manage"]
+    level:
+      slot: 31
+      material: EXPERIENCE_BOTTLE
+      name: "<gold><bold>Team level <white><level>"
+      lore: ["<gray>Next level: <white><next_level_cost>", "", "<yellow>Click to see the levels"]
+    top:
+      slot: 33
+      material: DIAMOND
+      name: "<aqua><bold>Top teams"
+      lore: ["<gray>Your team is <white>#<rank_kills></white> by kills.", "", "<yellow>Click to view"]
+    chat:
+      slot: 47
+      material: OAK_SIGN
+      name: "<#49d6a0><bold>Team chat"
+      lore: ["<gray>Mode: <chat_mode>", "", "<yellow>Click to switch", "<dark_gray>Or type /tc <message>"]
+    settings:
+      slot: 49
+      material: COMPARATOR
+      name: "<white><bold>Settings"
+      lore: ["<gray>Friendly fire <pvp>", "<gray>Joining: <open>", "", "<yellow>Click to change"]
+    leave:
+      slot: 51
+      material: OAK_DOOR
+      name: "<red><bold>Leave team"
+      lore: ["<gray>Leave <team>.", "", "<red>Click to leave"]
+    disband:
+      slot: 51
+      material: TNT
+      name: "<dark_red><bold>Disband team"
+      lore: ["<gray>Delete the team for good.", "<gray>The bank and chest go to you.", "", "<red>Click to disband"]
+
+members:
+  title: "<dark_gray>Members · <team_display>"
+  rows: 6
+  content: ["10-16", "19-25", "28-34"]
+  items:
+    member:
+      material: PLAYER_HEAD
+      name: "<white><player> <dark_gray>·</dark_gray> <role>"
+      lore:
+        - "<status>"
+        - "<gray>Joined <white><joined></white> ago"
+        - "<gray>Kills <white><kills></white> · Deaths <white><deaths>"
+        - ""
+        - "<manage>"
+    manage-hint: {name: "<yellow>Click to manage"}
+    invite:
+      slot: 47
+      material: EMERALD
+      name: "<green><bold>Invite a player"
+      lore: ["<gray>Pick an online player.", "", "<yellow>Click to choose"]
+    requests:
+      slot: 49
+      material: WRITABLE_BOOK
+      name: "<gold><bold>Join requests <gray>(<white><count></white>)"
+      lore: ["<gray>Players asking to join.", "", "<yellow>Click to answer"]
+    sent:
+      slot: 51
+      material: PAPER
+      name: "<white><bold>Sent invites <gray>(<white><count></white>)"
+      lore: ["<gray>Right-click an invite to take it back.", "", "<yellow>Click to view"]
+    previous: {slot: 45}
+    next: {slot: 53}
+    back: {slot: 4}
+
+member:
+  title: "<dark_gray>Member · <white><player>"
+  rows: 6
+  items:
+    head:
+      slot: 4
+      material: PLAYER_HEAD
+      name: "<white><player> <dark_gray>·</dark_gray> <role>"
+      lore: ["<status>", "<gray>Joined <white><joined></white> ago", "<gray>Kills <white><kills></white> · Deaths <white><deaths>"]
+    promote:
+      slot: 19
+      material: LIME_DYE
+      name: "<green><bold>Promote"
+      lore: ["<gray>Make <white><player></white> <aqua>Officer</aqua>.", "<gray>Their permissions reset to the rank's."]
+    demote:
+      slot: 20
+      material: ORANGE_DYE
+      name: "<gold><bold>Demote"
+      lore: ["<gray>Make <white><player></white> <gray>Member</gray>.", "<gray>Their permissions reset to the rank's."]
+    kick:
+      slot: 24
+      material: IRON_AXE
+      name: "<red><bold>Kick"
+      lore: ["<gray>Remove <white><player></white> from the team."]
+    transfer:
+      slot: 25
+      material: GOLDEN_HELMET
+      name: "<gold><bold>Make owner"
+      lore: ["<gray>Give the team to <white><player></white>.", "<gray>You become an officer."]
+    permission:
+      slots: ["28-34", "37-41"]
+      material: TEAM_PERMISSION
+      name: "<perm_name>"
+      lore: ["<gray><perm_description>", "", "<gray>Now: <state>", "<yellow>Click to toggle"]
+    back: {slot: 49}
+
+invite-picker:
+  title: "<dark_gray>Invite a player"
+  rows: 6
+  content: ["10-16", "19-25", "28-34", "37-43"]
+  items:
+    player:
+      material: PLAYER_HEAD
+      name: "<white><player>"
+      lore: ["", "<yellow>Click to invite"]
+    previous: {slot: 45}
+    next: {slot: 53}
+    back: {slot: 49}
+
+invites:
+  title: "<dark_gray>Your invites"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    invite:
+      material: TEAM_ICON
+      name: "<team_display> <tag_display>"
+      lore:
+        - "<gray><italic><description>"
+        - "<gray>Members <white><members></white>/<white><max_members></white> · Level <white><level>"
+        - "<gray>Invited by <white><inviter></white> · expires in <white><expires>"
+        - ""
+        - "<green>Left-click to join"
+        - "<red>Right-click to decline"
+    previous: {slot: 27}
+    next: {slot: 35}
+    back: {slot: 31}
+
+sent-invites:
+  title: "<dark_gray>Sent invites"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    invite:
+      material: PLAYER_HEAD
+      name: "<white><player>"
+      lore: ["<gray>Expires in <white><expires>", "", "<red>Right-click to take it back"]
+    previous: {slot: 27}
+    next: {slot: 35}
+    back: {slot: 31}
+
+requests:
+  title: "<dark_gray>Join requests"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    request:
+      material: PLAYER_HEAD
+      name: "<white><player>"
+      lore: ["<gray>Expires in <white><expires>", "", "<green>Left-click to accept", "<red>Right-click to deny"]
+    previous: {slot: 27}
+    next: {slot: 35}
+    back: {slot: 31}
+
+homes:
+  title: "<dark_gray>Team homes · <white><homes>/<max_homes>"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    home:
+      material: RED_BED
+      name: "<green><bold><home>"
+      lore:
+        - "<gray><world> <dark_gray>·</dark_gray> <white><coords>"
+        - "<gray>Set by <white><setter>"
+        - ""
+        - "<yellow>Left-click to teleport"
+        - "<red>Shift + right-click to delete"
+    add:
+      slot: 31
+      material: LIME_BED
+      name: "<green><bold>Set a home here"
+      lore: ["<gray>Saves where you stand.", "<gray><homes>/<max_homes> homes used.", "", "<yellow>Click to name it"]
+    previous: {slot: 27}
+    next: {slot: 35}
+    back: {slot: 29}
+
+bank:
+  title: "<dark_gray>Team bank · <green><balance>"
+  rows: 5
+  items:
+    balance:
+      slot: 4
+      material: GOLD_BLOCK
+      name: "<gold><bold><balance>"
+      lore: ["<gray>Team bank balance.", "<gray>Your money: <white><wallet>"]
+    deposit-1: {slot: 19, material: LIME_STAINED_GLASS_PANE, amount: 100, name: "<green>Deposit <white><amount>", lore: ["<yellow>Click to deposit"]}
+    deposit-2: {slot: 20, material: LIME_STAINED_GLASS_PANE, amount: 1000, name: "<green>Deposit <white><amount>", lore: ["<yellow>Click to deposit"]}
+    deposit-3: {slot: 21, material: LIME_STAINED_GLASS_PANE, amount: 10000, name: "<green>Deposit <white><amount>", lore: ["<yellow>Click to deposit"]}
+    deposit-custom: {slot: 28, material: EMERALD, name: "<green><bold>Deposit an amount", lore: ["<gray>Type any amount (2.5k, 1m...)", "", "<yellow>Click"]}
+    withdraw-1: {slot: 23, material: ORANGE_STAINED_GLASS_PANE, amount: 100, name: "<gold>Withdraw <white><amount>", lore: ["<yellow>Click to withdraw"]}
+    withdraw-2: {slot: 24, material: ORANGE_STAINED_GLASS_PANE, amount: 1000, name: "<gold>Withdraw <white><amount>", lore: ["<yellow>Click to withdraw"]}
+    withdraw-3: {slot: 25, material: ORANGE_STAINED_GLASS_PANE, amount: 10000, name: "<gold>Withdraw <white><amount>", lore: ["<yellow>Click to withdraw"]}
+    withdraw-custom: {slot: 34, material: GOLD_NUGGET, name: "<gold><bold>Withdraw an amount", lore: ["<gray>Type any amount", "", "<yellow>Click"]}
+    history:
+      slot: 31
+      material: BOOK
+      name: "<white><bold>History"
+      lore-header: ["<gray>Latest bank moves:"]
+      entry-deposit: "<dark_gray>· <green>+<amount></green> <gray><player> <dark_gray>(<ago> ago)"
+      entry-withdraw: "<dark_gray>· <red>-<amount></red> <gray><player> <dark_gray>(<ago> ago)"
+      entry-level_up: "<dark_gray>· <gold>-<amount></gold> <gray>level up <dark_gray>(<ago> ago)"
+      entry-admin: "<dark_gray>· <aqua>=<amount></aqua> <gray>admin <dark_gray>(<ago> ago)"
+      lore-empty: ["<gray>No deposits yet."]
+      loading: "<dark_gray>Loading..."
+    back: {slot: 40}
+
+level:
+  title: "<dark_gray>Team level · <white><level>/<max_level>"
+  rows: 4
+  content: ["10-16", "19-25"]
+  items:
+    level:
+      lore:
+        - "<gray>Members <white><level_members>"
+        - "<gray>Homes <white><level_homes>"
+        - "<gray>Chest rows <white><level_rows>"
+        - "<gray>Cost <white><level_cost>"
+        - ""
+        - "<state>"
+    reached: {material: EXPERIENCE_BOTTLE, name: "<green><bold>Level <number>", state: "<green>✔ Reached"}
+    next: {material: ENCHANTED_BOOK, glow: true, name: "<yellow><bold>Level <number>", state: "<yellow>Click to upgrade <gray>(bank: <white><balance></white>)"}
+    locked: {material: BOOK, name: "<dark_gray><bold>Level <number>", state: "<dark_gray>Locked"}
+    back: {slot: 31}
+
+relations:
+  title: "<dark_gray>Allies & enemies"
+  rows: 6
+  content: ["10-16", "19-25", "28-34"]
+  items:
+    ally:
+      material: TEAM_ICON
+      name: "<aqua><bold>Ally</bold> <team_display> <tag_display>"
+      lore: ["<gray>Members <white><members></white> · Level <white><level>", "", "<yellow>Right-click to end the alliance"]
+    enemy:
+      material: TEAM_ICON
+      name: "<red><bold>Enemy</bold> <team_display> <tag_display>"
+      lore: ["<gray>Members <white><members></white> · Level <white><level>", "", "<yellow>Right-click to make peace"]
+    request:
+      material: TEAM_ICON
+      name: "<gold><bold>Ally request</bold> <team_display>"
+      lore: ["<gray>They want to be allies.", "", "<green>Click to accept"]
+    add-ally:
+      slot: 48
+      material: LIGHT_BLUE_BANNER
+      name: "<aqua><bold>Make an ally"
+      lore: ["<gray>Ask another team to ally.", "<gray>Allies share ally chat and", "<gray>can't hurt each other.", "", "<yellow>Click and type a team"]
+    add-enemy:
+      slot: 50
+      material: RED_BANNER
+      name: "<red><bold>Declare an enemy"
+      lore: ["<gray>Mark a team as an enemy.", "", "<yellow>Click and type a team"]
+    previous: {slot: 45}
+    next: {slot: 53}
+    back: {slot: 49}
+
+settings:
+  title: "<dark_gray>Settings · <team_display>"
+  rows: 5
+  items:
+    pvp:
+      slot: 10
+      material: IRON_SWORD
+      name: "<red><bold>Friendly fire"
+      lore: ["<gray>Teammates can hurt each other: <pvp>", "", "<yellow>Click to toggle"]
+    ally-pvp:
+      slot: 11
+      material: GOLDEN_SWORD
+      name: "<aqua><bold>Ally damage"
+      lore: ["<gray>Allies can hurt you: <ally_pvp>", "", "<yellow>Click to toggle"]
+    open:
+      slot: 12
+      material: OAK_FENCE_GATE
+      name: "<green><bold>Joining"
+      lore: ["<gray>Now: <open>", "<gray>Open teams need no invite.", "", "<yellow>Click to toggle"]
+    color:
+      slot: 14
+      material: TEAM_DYE
+      name: "<team_display> <white><bold>colour"
+      lore: ["<gray>Colour of your name and tag.", "", "<yellow>Click to choose"]
+    icon:
+      slot: 15
+      material: TEAM_ICON
+      name: "<white><bold>Team icon"
+      lore: ["<gray>Hold an item (a banner looks", "<gray>best) and click to use it.", "", "<yellow>Click to set"]
+    tag:
+      slot: 16
+      material: NAME_TAG
+      name: "<white><bold>Tag <tag_display>"
+      lore: ["<gray>Shown in chat and placeholders.", "", "<yellow>Click to change"]
+    description:
+      slot: 28
+      material: WRITABLE_BOOK
+      name: "<white><bold>Description"
+      lore: ["<gray><italic><description>", "", "<yellow>Click to change"]
+    motd:
+      slot: 29
+      material: BELL
+      name: "<white><bold>Message of the day"
+      lore: ["<gray><italic><motd>", "<gray>Shown to members when they join.", "", "<yellow>Click to change"]
+    rename:
+      slot: 30
+      material: ANVIL
+      name: "<white><bold>Rename team"
+      lore: ["<gray>Owner only.", "", "<yellow>Click to rename"]
+    back: {slot: 40}
+
+color:
+  title: "<dark_gray>Team colour"
+  rows: 4
+  content: ["10-17", "19-26"]
+  items:
+    color:
+      name: "<color_display>"
+      lore: ["", "<yellow>Click to choose"]
+    back: {slot: 31}
+
+top:
+  title: "<dark_gray>Top teams · <white><stat_name>"
+  rows: 6
+  content: ["19-25", "28-34", "37-43"]
+  items:
+    team:
+      material: TEAM_ICON
+      name: "<gold>#<rank> <team_display> <tag_display>"
+      lore:
+        - "<gray><stat_name>: <white><value>"
+        - ""
+        - "<gray>Members <white><members></white>/<white><max_members></white> · Level <white><level>"
+        - "<gray>Kills <white><kills></white> · KDR <white><kdr>"
+        - "<gray>Bank <green><balance>"
+        - ""
+        - "<yellow>Click for details"
+    tab-kills: {slot: 1, material: DIAMOND_SWORD, name: "<red><bold>Kills", lore: ["<yellow>Click to sort"]}
+    tab-balance: {slot: 3, material: GOLD_INGOT, name: "<gold><bold>Bank", lore: ["<yellow>Click to sort"]}
+    tab-level: {slot: 5, material: EXPERIENCE_BOTTLE, name: "<green><bold>Level", lore: ["<yellow>Click to sort"]}
+    tab-members: {slot: 7, material: PLAYER_HEAD, name: "<aqua><bold>Members", lore: ["<yellow>Click to sort"]}
+    previous: {slot: 45}
+    next: {slot: 53}
+    back: {slot: 49}
+
+browse:
+  title: "<dark_gray>All teams · <white><teams>"
+  rows: 6
+  content: ["10-16", "19-25", "28-34", "37-43"]
+  items:
+    team:
+      material: TEAM_ICON
+      name: "<team_display> <tag_display>"
+      lore:
+        - "<gray><italic><description>"
+        - "<gray>Members <white><members></white>/<white><max_members></white> <dark_gray>(<green><online> online</green>)"
+        - "<gray>Level <white><level></white> · <open>"
+        - ""
+        - "<yellow>Click for details"
+    previous: {slot: 45}
+    next: {slot: 53}
+    back: {slot: 49}
+
+profile:
+  title: "<dark_gray>Team · <team_display>"
+  rows: 5
+  content: ["19-25", "28-34"]
+  items:
+    info:
+      slot: 4
+      material: TEAM_ICON
+      name: "<team_display> <tag_display>"
+      lore:
+        - "<gray><italic><description>"
+        - ""
+        - "<gray>Owner <white><owner>"
+        - "<gray>Level <white><level></white> · <open>"
+        - "<gray>Members <white><members></white>/<white><max_members></white> <dark_gray>(<green><online> online</green>)"
+        - "<gray>Kills <white><kills></white> · KDR <white><kdr>"
+        - "<gray>Relation: <relation>"
+    member:
+      material: PLAYER_HEAD
+      name: "<white><player> <dark_gray>·</dark_gray> <role>"
+      lore: ["<status>"]
+    join:
+      slot: 10
+      material: EMERALD
+      name: "<green><bold>Join</bold>"
+      lore: ["<gray><open>", "", "<yellow>Click to join or ask"]
+    ally:
+      slot: 12
+      material: LIGHT_BLUE_BANNER
+      name: "<aqua><bold>Ally"
+      lore: ["<gray>Ask them to become allies.", "", "<yellow>Click"]
+    enemy:
+      slot: 14
+      material: RED_BANNER
+      name: "<red><bold>Enemy"
+      lore: ["<gray>Declare them an enemy.", "", "<yellow>Click"]
+    neutral:
+      slot: 16
+      material: WHITE_BANNER
+      name: "<gray><bold>Neutral"
+      lore: ["<gray>End an alliance or a war.", "", "<yellow>Click"]
+    back: {slot: 40}
+
+confirm:
+  title: "<dark_gray><question>"
+  rows: 3
+  items:
+    confirm:
+      slots: ["10-12"]
+      material: LIME_STAINED_GLASS_PANE
+      name: "<green><bold>Confirm"
+      lore: ["<gray><question>"]
+    about:
+      slot: 13
+      material: PAPER
+      name: "<white><question>"
+      lore: ["<gray><detail>"]
+    cancel:
+      slots: ["14-16"]
+      material: RED_STAINED_GLASS_PANE
+      name: "<red><bold>Cancel"

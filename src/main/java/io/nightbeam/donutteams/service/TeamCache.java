@@ -3,11 +3,14 @@ package io.nightbeam.donutteams.service;
 import io.nightbeam.donutteams.model.Team;
 import io.nightbeam.donutteams.model.TeamInvite;
 import io.nightbeam.donutteams.util.TeamNameValidator;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/** Teams in memory, found by id, name or member. Safe to read from any thread. */
 public final class TeamCache {
 
     private final Map<UUID, Team> byId = new ConcurrentHashMap<>();
@@ -25,7 +28,7 @@ public final class TeamCache {
         }
         long now = System.currentTimeMillis();
         for (TeamInvite invite : loadedInvites) {
-            if (!invite.expired() && invite.expiresAtMillis() > now) {
+            if (!invite.expired(now) && byId.containsKey(invite.teamId())) {
                 invites.put(inviteKey(invite.teamId(), invite.playerId()), invite);
             }
         }
@@ -39,9 +42,14 @@ public final class TeamCache {
 
     public void remove(Team team) {
         byId.remove(team.id());
-        nameToTeam.remove(TeamNameValidator.nameKey(team.name()));
+        nameToTeam.remove(TeamNameValidator.nameKey(team.name()), team.id());
         team.members().forEach(member -> playerToTeam.remove(member.playerId(), team.id()));
         invites.entrySet().removeIf(entry -> entry.getValue().teamId().equals(team.id()));
+    }
+
+    public void rename(Team team, String oldName) {
+        nameToTeam.remove(TeamNameValidator.nameKey(oldName), team.id());
+        nameToTeam.put(TeamNameValidator.nameKey(team.name()), team.id());
     }
 
     public Team byId(UUID teamId) {
@@ -49,11 +57,14 @@ public final class TeamCache {
     }
 
     public Team byPlayer(UUID playerId) {
-        UUID teamId = playerToTeam.get(playerId);
+        UUID teamId = playerId == null ? null : playerToTeam.get(playerId);
         return byId(teamId);
     }
 
     public Team byName(String name) {
+        if (name == null) {
+            return null;
+        }
         UUID teamId = nameToTeam.get(TeamNameValidator.nameKey(name));
         return byId(teamId);
     }
@@ -70,24 +81,63 @@ public final class TeamCache {
         invites.put(inviteKey(invite.teamId(), invite.playerId()), invite);
     }
 
+    /** The invite, or null when there is none or it has expired. */
     public TeamInvite invite(UUID teamId, UUID playerId) {
-        return invites.get(inviteKey(teamId, playerId));
+        TeamInvite invite = invites.get(inviteKey(teamId, playerId));
+        if (invite != null && invite.expired()) {
+            invites.remove(inviteKey(teamId, playerId), invite);
+            return null;
+        }
+        return invite;
     }
 
     public void removeInvite(UUID teamId, UUID playerId) {
         invites.remove(inviteKey(teamId, playerId));
     }
 
-    public Collection<TeamInvite> invitesFor(UUID playerId) {
-        return invites.values().stream().filter(invite -> invite.playerId().equals(playerId)).toList();
+    public void removeInvitesFor(UUID playerId) {
+        invites.values().removeIf(invite -> invite.playerId().equals(playerId));
     }
 
-    public Collection<TeamInvite> teamInvites(UUID teamId) {
-        return invites.values().stream().filter(invite -> invite.teamId().equals(teamId)).toList();
+    /** Live invites a player has received, newest first. */
+    public List<TeamInvite> invitesFor(UUID playerId) {
+        long now = System.currentTimeMillis();
+        List<TeamInvite> out = new ArrayList<>();
+        for (TeamInvite invite : invites.values()) {
+            if (invite.playerId().equals(playerId) && !invite.expired(now) && byId.containsKey(invite.teamId())) {
+                out.add(invite);
+            }
+        }
+        out.sort((a, b) -> Long.compare(b.expiresAtMillis(), a.expiresAtMillis()));
+        return out;
+    }
+
+    /** Live invites a team has sent. */
+    public List<TeamInvite> teamInvites(UUID teamId) {
+        long now = System.currentTimeMillis();
+        List<TeamInvite> out = new ArrayList<>();
+        for (TeamInvite invite : invites.values()) {
+            if (invite.teamId().equals(teamId) && !invite.expired(now)) {
+                out.add(invite);
+            }
+        }
+        return out;
+    }
+
+    /** Drops expired invites; returns how many. */
+    public int purgeExpiredInvites() {
+        long now = System.currentTimeMillis();
+        int before = invites.size();
+        invites.values().removeIf(invite -> invite.expired(now));
+        return before - invites.size();
     }
 
     public Collection<Team> teams() {
         return byId.values();
+    }
+
+    public int size() {
+        return byId.size();
     }
 
     private static String inviteKey(UUID teamId, UUID playerId) {

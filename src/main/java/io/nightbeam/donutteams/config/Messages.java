@@ -1,101 +1,158 @@
 package io.nightbeam.donutteams.config;
 
+import io.nightbeam.donutteams.util.Text;
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.title.Title;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
 
+/**
+ * messages.yml: MiniMessage templates (legacy {@code &} codes also work). Placeholders are passed as key/value
+ * pairs; a {@link Component} value is inserted as is, anything else as plain text that players cannot style.
+ * An empty message sends nothing, so any message can be switched off.
+ */
 public final class Messages {
 
     private static final MiniMessage MINI = MiniMessage.miniMessage();
     private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
 
-    private final JavaPlugin plugin;
-    private FileConfiguration yaml;
-    private String prefixRaw = "<dark_gray>[<gold><bold>DonutTeams</bold></gold>]</dark_gray> ";
-
-    public Messages(JavaPlugin plugin) {
-        this.plugin = plugin;
-    }
+    private volatile FileConfiguration yaml = new YamlConfiguration();
+    private volatile String prefixRaw = "";
 
     public void load(FileConfiguration yaml) {
         this.yaml = yaml == null ? new YamlConfiguration() : yaml;
         String loaded = this.yaml.getString("prefix");
-        this.prefixRaw = loaded == null || loaded.isBlank()
-                ? "<dark_gray>[<gold><bold>DonutTeams</bold></gold>]</dark_gray> "
-                : loaded;
+        this.prefixRaw = loaded == null ? "" : loaded;
     }
 
-    public String raw(String path, String def) {
-        if (yaml == null) {
-            return def;
-        }
+    public FileConfiguration yaml() {
+        return yaml;
+    }
+
+    /** The template at a path, or the path itself when missing (so a typo is visible, not silent). */
+    public String raw(String path) {
         String value = yaml.getString(path);
-        return value == null || value.isEmpty() ? def : value;
+        return value == null ? path : value;
     }
 
-    public Component component(String path, String def, String... keyValues) {
-        return deserialize(raw(path, def), keyValues);
+    public boolean isEmpty(String path) {
+        String value = yaml.getString(path);
+        return value != null && value.isEmpty();
     }
 
-    public Component prefixed(String path, String def, String... keyValues) {
-        return deserialize(prefixRaw + raw(path, def), keyValues);
+    public Component component(String path, Object... keyValues) {
+        return render(raw(path), keyValues);
     }
 
-    public List<Component> list(String path, String... keyValues) {
-        List<String> lines = yaml == null ? List.of() : yaml.getStringList(path);
+    public List<Component> list(String path, Object... keyValues) {
+        List<String> lines = yaml.getStringList(path);
         List<Component> out = new ArrayList<>(lines.size());
         for (String line : lines) {
-            out.add(deserialize(line, keyValues));
+            out.add(render(line, keyValues));
         }
         return out;
     }
 
-    public void send(CommandSender sender, String path, String def, String... keyValues) {
-        sender.sendMessage(prefixed(path, def, keyValues));
+    public Component prefixed(String path, Object... keyValues) {
+        return render(prefixRaw + raw(path), keyValues);
     }
 
-    public Component deserialize(String template, String... keyValues) {
+    public void send(CommandSender sender, String path, Object... keyValues) {
+        if (sender == null || isEmpty(path)) {
+            return;
+        }
+        sender.sendMessage(prefixed(path, keyValues));
+    }
+
+    /** Sends without the prefix (multi-line info blocks). */
+    public void sendPlain(CommandSender sender, String path, Object... keyValues) {
+        if (sender == null || isEmpty(path)) {
+            return;
+        }
+        sender.sendMessage(component(path, keyValues));
+    }
+
+    public void actionBar(Player player, String path, Object... keyValues) {
+        if (player == null || isEmpty(path)) {
+            return;
+        }
+        player.sendActionBar(component(path, keyValues));
+    }
+
+    public void title(Player player, String titlePath, String subtitlePath, long stayTicks, Object... keyValues) {
+        if (player == null) {
+            return;
+        }
+        Component title = isEmpty(titlePath) ? Component.empty() : component(titlePath, keyValues);
+        Component subtitle = subtitlePath == null || isEmpty(subtitlePath) ? Component.empty() : component(subtitlePath, keyValues);
+        player.showTitle(Title.title(title, subtitle, Title.Times.times(Duration.ZERO,
+                Duration.ofMillis(stayTicks * 50L), Duration.ofMillis(250))));
+    }
+
+    /** A clickable chat button that runs a command; its look and hover text come from messages.yml. */
+    public Component button(String path, String command, Object... keyValues) {
+        Component label = component("buttons." + path + ".label", keyValues);
+        Component hover = component("buttons." + path + ".hover", keyValues);
+        return label.clickEvent(ClickEvent.runCommand(command)).hoverEvent(HoverEvent.showText(hover));
+    }
+
+    public Component render(String template, Object... keyValues) {
         if (template == null || template.isEmpty()) {
             return Component.empty();
         }
-        Map<String, String> placeholders = toMap(keyValues);
-        TagResolver.Builder builder = TagResolver.builder();
-        for (Map.Entry<String, String> entry : placeholders.entrySet()) {
-            builder.resolver(Placeholder.unparsed(entry.getKey(), entry.getValue() == null ? "" : entry.getValue()));
-        }
+        String source = Text.legacyToMini(template);
         try {
-            return MINI.deserialize(template, builder.build());
+            return MINI.deserialize(source, resolver(keyValues));
         } catch (Exception ignored) {
             return Component.text(template);
         }
+    }
+
+    /** An item name or lore line: not italic unless the template says so. */
+    public static Component item(Component component) {
+        return component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
+    }
+
+    public static List<Component> item(List<Component> lines) {
+        List<Component> out = new ArrayList<>(lines.size());
+        for (Component line : lines) {
+            out.add(item(line));
+        }
+        return out;
     }
 
     public String plain(Component component) {
         return PLAIN.serialize(component);
     }
 
-    public MiniMessage mini() {
-        return MINI;
-    }
-
-    private static Map<String, String> toMap(String... keyValues) {
-        Map<String, String> map = new HashMap<>();
-        if (keyValues == null) {
-            return map;
+    public static TagResolver resolver(Object... keyValues) {
+        if (keyValues == null || keyValues.length == 0) {
+            return TagResolver.empty();
         }
+        TagResolver.Builder builder = TagResolver.builder();
         for (int i = 0; i + 1 < keyValues.length; i += 2) {
-            map.put(keyValues[i], keyValues[i + 1] == null ? "" : keyValues[i + 1]);
+            String key = String.valueOf(keyValues[i]);
+            Object value = keyValues[i + 1];
+            if (value instanceof Component component) {
+                builder.resolver(Placeholder.component(key, component));
+            } else if (value instanceof TagResolver resolver) {
+                builder.resolver(resolver);
+            } else {
+                builder.resolver(Placeholder.unparsed(key, value == null ? "" : String.valueOf(value)));
+            }
         }
-        return map;
+        return builder.build();
     }
 }

@@ -5,42 +5,75 @@ api-version: '1.20'
 folia-supported: true
 authors:
   - Nightbeam Studio
-website: https://nightbeam.cloud
-description: Folia-first team GUI, homes, chat, and friendly-fire for Paper.
+website: https://github.com/MeherBenSalem/Donut-Teams
+description: Teams with allies, a bank, a shared chest, homes, levels and leaderboards for Paper, Folia and Purpur.
 softdepend:
-  - DonutCore
   - Vault
-  - LuckPerms
   - PlaceholderAPI
+  - LuckPerms
+  - DonutCore
 
 commands:
   team:
-    description: Donut Teams GUI and subcommands.
-    usage: /team [create|disband|invite|join|leave|kick|info|chat|home|sethome|delhome|pvp|transfer]
-    aliases: [teams, dt]
+    description: The team menu and every team command.
+    usage: /team [help]
+    aliases: [teams, dt, clan]
     permission: donutteams.use
+  teamchat:
+    description: Team chat (a message, or toggle).
+    usage: /tc [message]
+    aliases: [tc, tchat]
+    permission: donutteams.chat
+  allychat:
+    description: Ally chat (a message, or toggle).
+    usage: /ac [message]
+    aliases: [ac, achat]
+    permission: donutteams.chat
   donutteams:
-    description: Donut Teams admin commands.
-    usage: /donutteams reload
-    aliases: [dteams]
+    description: Donut Teams staff commands.
+    usage: /donutteams <reload|info|disband|join|kick|setowner|rename|bank|level|chest|spy|board|purge|version>
+    aliases: [dteams, teamadmin, ta]
     permission: donutteams.admin
 
 permissions:
   donutteams.use:
-    description: Use /team and the team GUI.
+    description: Use /team and the team menus.
     default: true
   donutteams.create:
     description: Create a team.
     default: true
   donutteams.chat:
-    description: Use team chat.
+    description: Use team chat and ally chat.
     default: true
   donutteams.home:
-    description: Teleport to the team home.
+    description: Teleport to team homes (the team rank must allow it too).
     default: true
+  donutteams.player:
+    description: Every player permission.
+    default: true
+    children:
+      donutteams.use: true
+      donutteams.create: true
+      donutteams.chat: true
+      donutteams.home: true
+  donutteams.bypass.cost:
+    description: Create a team without paying.
+    default: op
+  donutteams.bypass.warmup:
+    description: Teleport to team homes instantly.
+    default: false
+  donutteams.bypass.cooldown:
+    description: Ignore the team home cooldown.
+    default: op
+  donutteams.bypass.friendlyfire:
+    description: Hurt teammates and allies even with friendly fire off.
+    default: false
   donutteams.admin:
-    description: Reload Donut Teams and bypass admin checks.
+    description: /donutteams staff commands and update notices.
+    default: op
+  donutteams.admin.spy:
+    description: Read every team and ally chat with /donutteams spy.
     default: op
   donutteams.slots.8:
-    description: Team member cap of 8 (lite maximum).
-    default: true
+    description: "Example member cap node: donutteams.slots.<n> raises the owner's team cap to n (up to max-members-cap)."
+    default: false

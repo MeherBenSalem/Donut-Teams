@@ -1,33 +1,153 @@
-# Donut Teams lite 1.0.1 — Nightbeam Studio
-# Advanced features (Redis, multi-homes, allies, bank, cosmetics) ship in NightTeams Pro (separate repository).
+# ─────────────────────────────────────────────────────────────────────────────
+#  Donut Teams 2.0 "The Alliance Update" by Nightbeam Studio
+#  Paper, Folia and Purpur 1.20.1 – 26.3 · https://github.com/MeherBenSalem/Donut-Teams
+#
+#  Text lives in messages.yml, menu layouts in menus.yml. Both use MiniMessage
+#  (https://docs.advntr.dev/minimessage/format.html); legacy & colour codes work too.
+#  /donutteams reload applies changes to every file except storage.
+# ─────────────────────────────────────────────────────────────────────────────
+config-version: 2
 
 storage:
+  # SQLITE (a file in this folder, nothing to set up) or MARIADB (MariaDB or MySQL server).
   type: SQLITE
   sqlite:
     file: teams.db
+  mariadb:
+    host: localhost
+    port: 3306
+    database: donutteams
+    username: donutteams
+    password: ""
+    # Extra JDBC URL parameters.
+    parameters: "useSsl=false&serverTimezone=UTC"
+    pool-size: 6
+  # Prefix for table names, so several plugins can share one database (MariaDB/MySQL).
+  table-prefix: ""
 
 teams:
-  # Hard-caps at 8 even if a higher donutteams.slots.<n> node exists.
-  default-max-members: 8
-  lite-max-members: 8
   name-min: 3
   name-max: 16
   tag-min: 2
   tag-max: 6
+  # Names and tags containing these words are refused (case-insensitive).
+  blocked-names: [admin, staff, owner, moderator, server, console]
+  # What creating a team costs (needs Vault). 0 = free.
+  create-cost: 0
+  # Teams start open (anyone can /team join) or invite-only.
+  default-open: false
+  # The highest member cap any team can reach, whatever its level or donutteams.slots.<n> permission.
+  max-members-cap: 50
   invite-expire-seconds: 300
+  request-expire-seconds: 300
+  # Worlds where team homes cannot be set or used.
+  disabled-home-worlds: []
 
-home:
+# Default permissions for each rank. Owners have all of them. INVITE, KICK, HOME, SETHOME, SPEAK, PVP,
+# BANK_DEPOSIT, BANK_WITHDRAW, CHEST, RELATIONS, SETTINGS, LEVEL_UP. A promoted or demoted member gets the
+# permissions of their new rank; the owner can change any member's permissions in the member menu.
+roles:
+  officer:
+    permissions: [INVITE, KICK, HOME, SETHOME, SPEAK, PVP, BANK_DEPOSIT, BANK_WITHDRAW, CHEST, RELATIONS, SETTINGS]
+  member:
+    permissions: [HOME, SPEAK, BANK_DEPOSIT, CHEST]
+
+# Team levels. A team pays the next level's cost from its bank (needs Vault). Each level sets the member cap,
+# the number of homes and the rows of the team chest (1-6). Level 1 is where every team starts.
+levels:
+  enabled: true
+  list:
+    1: {cost: 0, max-members: 8, max-homes: 1, chest-rows: 1}
+    2: {cost: 25000, max-members: 10, max-homes: 2, chest-rows: 2}
+    3: {cost: 75000, max-members: 12, max-homes: 3, chest-rows: 3}
+    4: {cost: 200000, max-members: 16, max-homes: 4, chest-rows: 4}
+    5: {cost: 500000, max-members: 20, max-homes: 5, chest-rows: 6}
+
+homes:
   warmup-seconds: 3
   cancel-on-move: true
+  cancel-on-damage: true
+  # Seconds between team home teleports for one player. 0 = none.
+  cooldown-seconds: 0
+  # Show the countdown as a title as well as on the action bar.
+  title: true
+  particles: true
 
 chat:
   enabled: true
+  ally-chat: true
+  # Messages starting with this go to team chat without /tc (for example "@"). Empty = off.
+  quick-prefix: ""
+  ally-quick-prefix: ""
+  log-to-console: true
 
 pvp:
-  # Default friendly-fire state for newly created teams.
+  # Default friendly fire for new teams (true = teammates can hurt each other).
   default-friendly-fire: false
+  # Default for allies hurting each other.
+  default-ally-friendly-fire: false
+
+relations:
+  allies: true
+  enemies: true
+  max-allies: 5
+  request-expire-seconds: 300
+
+bank:
+  # Needs Vault and an economy plugin. Without one the bank is hidden.
+  enabled: true
+  # The most a team bank can hold. 0 = no limit.
+  max-balance: 0
+  # Lines of bank history kept per team.
+  history-size: 45
+
+chest:
+  enabled: true
+  # Saves open team chests this often, as well as when they close.
+  autosave-seconds: 60
+
+stats:
+  # Count player kills and deaths (kills of teammates and allies are not counted).
+  enabled: true
+
+leaderboard:
+  # How often the top teams are worked out.
+  refresh-seconds: 30
+  # In-world boards (/donutteams board create <name> <stat>).
+  board-refresh-seconds: 30
+  board-rows: 10
+
+notifications:
+  # Tell teammates when a member joins or leaves the server.
+  member-online: true
+  member-offline: true
+  # Show the team's message of the day when a member joins the server.
+  motd-on-join: true
+
+menus:
+  # Use the native text-input dialogs of Minecraft 1.21.7+ for names and amounts where the server supports them,
+  # instead of typing in chat.
+  dialogs: true
+
+# Sounds: a sound name, optionally with volume and pitch ("BLOCK_NOTE_BLOCK_PLING 1 1.4"). Empty = silent.
+sounds:
+  menu-click: UI_BUTTON_CLICK 0.6 1
+  team-created: UI_TOAST_CHALLENGE_COMPLETE 0.7 1
+  team-joined: ENTITY_PLAYER_LEVELUP 0.8 1.2
+  team-disbanded: BLOCK_BEACON_DEACTIVATE 1 1
+  invite-received: BLOCK_NOTE_BLOCK_PLING 1 1.4
+  notify: BLOCK_NOTE_BLOCK_CHIME 0.8 1.2
+  chat: ""
+  home-tick: BLOCK_NOTE_BLOCK_HAT 0.6 1.6
+  home-teleport: ENTITY_ENDERMAN_TELEPORT 0.8 1
+  level-up: UI_TOAST_CHALLENGE_COMPLETE 1 1
+  bank: BLOCK_AMETHYST_BLOCK_CHIME 1 1
+  chest-open: BLOCK_ENDER_CHEST_OPEN 0.7 1
+  chest-close: BLOCK_ENDER_CHEST_CLOSE 0.7 1
+  error: ENTITY_VILLAGER_NO 0.7 1
+
+update-check:
+  enabled: true
 
 metrics:
   enabled: true
-  # bStats plugin id. 0 = stub / skip.
-  bstats-id: 0

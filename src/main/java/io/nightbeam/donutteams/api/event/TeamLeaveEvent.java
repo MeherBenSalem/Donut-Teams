@@ -2,37 +2,34 @@ package io.nightbeam.donutteams.api.event;
 
 import java.util.UUID;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class TeamLeaveEvent extends Event implements Cancellable {
+/** A member is about to leave a team. Cancel to stop it. */
+public final class TeamLeaveEvent extends CancellableTeamEvent {
 
     public enum Reason {
         LEAVE,
         KICK,
-        DISBAND
+        DISBAND,
+        ADMIN
     }
 
     private static final HandlerList HANDLERS = new HandlerList();
 
     private final Player player;
     private final UUID playerId;
-    private final UUID teamId;
-    private final String teamName;
     private final Reason reason;
-    private boolean cancelled;
 
     public TeamLeaveEvent(@Nullable Player player, UUID playerId, UUID teamId, String teamName, Reason reason) {
+        super(teamId, teamName);
         this.player = player;
         this.playerId = playerId;
-        this.teamId = teamId;
-        this.teamName = teamName;
         this.reason = reason;
     }
 
+    /** The member, when online. */
     @Nullable
     public Player getPlayer() {
         return player;
@@ -42,26 +39,8 @@ public final class TeamLeaveEvent extends Event implements Cancellable {
         return playerId;
     }
 
-    public UUID getTeamId() {
-        return teamId;
-    }
-
-    public String getTeamName() {
-        return teamName;
-    }
-
     public Reason getReason() {
         return reason;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancelled) {
-        this.cancelled = cancelled;
     }
 
     @Override

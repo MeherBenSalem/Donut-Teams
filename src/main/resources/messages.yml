@@ -1,146 +1,346 @@
-prefix: "<dark_gray>[<gold><bold>DonutTeams</bold></gold>]</dark_gray> "
+# Donut Teams 2.0 messages. MiniMessage format (https://docs.advntr.dev/minimessage/format.html); legacy & codes
+# work too. An empty message ("") is not sent. Placeholders are listed in the README; most team messages accept
+# <team>, <team_display>, <tag>, <tag_display>, <members>, <max_members>, <level>, <balance>, <kills> and more.
+messages-version: 2
 
-general:
-  no-permission: "<red>You do not have permission to do that."
-  players-only: "<red>Only players can use this command."
-  unknown-subcommand: "<red>Unknown subcommand. Use <white>/team</white> for help."
-  reload: "<green>Donut Teams config and messages reloaded."
-  usage: "<gray>Usage: <white><usage>"
-  error: "<red>Something went wrong. Check console."
-  player-not-found: "<red>Player <white><player></white> is not online."
-  not-in-team: "<red>You are not in a team."
-  already-in-team: "<red>You are already in a team."
-  team-not-found: "<red>Team <white><team></white> was not found."
-  no-permission-team: "<red>Your team role cannot do that."
+prefix: "<#49d6a0><bold>Teams</bold></#49d6a0> <dark_gray>»</dark_gray> "
+
+format:
+  tag: "<dark_gray>[</dark_gray><tag><dark_gray>]</dark_gray>"
+  "on": "<green>On"
+  "off": "<red>Off"
+  open: "<green>Open to all"
+  invite-only: "<gold>Invite only"
+  none: "<dark_gray>none"
+  no-description: "No description yet."
+  no-motd: "No message of the day."
+  online: "<green>● Online"
+  offline: "<gray>● Offline <dark_gray>(<ago> ago)"
+
+roles:
+  owner: "<gold>Owner"
+  officer: "<aqua>Officer"
+  member: "<gray>Member"
+
+relation-names:
+  teammate: "<green>Teammate"
+  ally: "<aqua>Ally"
+  neutral: "<gray>Neutral"
+  enemy: "<red>Enemy"
+
+permissions:
+  invite: {name: "Invite", description: "Invite players and answer join requests"}
+  kick: {name: "Kick", description: "Kick lower ranks"}
+  home: {name: "Use homes", description: "Teleport to team homes"}
+  sethome: {name: "Set homes", description: "Set and delete team homes"}
+  speak: {name: "Team chat", description: "Talk in team and ally chat"}
+  pvp: {name: "Friendly fire", description: "Toggle friendly fire"}
+  bank-deposit: {name: "Deposit", description: "Put money in the team bank"}
+  bank-withdraw: {name: "Withdraw", description: "Take money from the team bank"}
+  chest: {name: "Team chest", description: "Open the team chest"}
+  relations: {name: "Diplomacy", description: "Make allies and enemies"}
+  settings: {name: "Settings", description: "Change tag, colour, icon, description, MOTD"}
+  level-up: {name: "Level up", description: "Spend bank money on the next level"}
+
+buttons:
+  accept-invite: {label: "<green><bold>[Accept]</bold>", hover: "<gray>Join <white><team>"}
+  decline-invite: {label: "<red><bold>[Decline]</bold>", hover: "<gray>Decline the invite"}
+  accept-request: {label: "<green><bold>[Accept]</bold>", hover: "<gray>Let <white><player></white> join"}
+  deny-request: {label: "<red><bold>[Deny]</bold>", hover: "<gray>Turn <white><player></white> away"}
+  accept-ally: {label: "<aqua><bold>[Ally]</bold>", hover: "<gray>Become allies with <white><team>"}
+  request: {label: "<gold><bold>[Request to join]</bold>", hover: "<gray>Ask <white><team></white> to let you in"}
+  confirm: {label: "<red><bold>[Confirm]</bold>", hover: "<gray>Click to confirm"}
+  create: {label: "<green><bold>[Create one]</bold>", hover: "<gray>Open the team menu"}
+  open-invites: {label: "<green><bold>[View]</bold>", hover: "<gray>See your invites"}
+  cancel-prompt: {label: "<red>[Cancel]", hover: "<gray>Cancel"}
+
+error:
+  no-permission: "<red>You don't have permission to do that."
+  players-only: "<red>Only players can do that."
+  not-in-team: "<red>You're not in a team. <create>"
+  already-in-team: "<red>You're already in a team. Leave it first."
+  team-not-found: "<red>No team called <white><team></white>."
+  no-team-permission: "<red>Your rank can't do that <dark_gray>(<gray><permission></gray>)</dark_gray>."
   owner-only: "<red>Only the team owner can do that."
-  cancelled: "<red>Action cancelled."
+  not-a-member: "<red><white><player></white> isn't on your team."
+  manage-self: "<red>You can't do that to yourself."
+  rank-too-low: "<red>You can only manage members below your rank."
+  player-not-found: "<red><white><player></white> isn't online."
+  player-offline: "<red><white><player></white> is offline now."
+  cancelled: "<red>That was cancelled."
+  generic: "<red>Something went wrong. Check the console."
+  invalid-amount: "<red><white><input></white> isn't an amount. Try <white>500</white>, <white>2.5k</white> or <white>1m</white>."
+  feature-disabled: "<red>That's turned off on this server."
+  unknown-command: "<red>Unknown command. <gray>Type <white>/team help</white>."
+  usage: "<gray>Usage: <white><usage>"
+
+help:
+  header: "<dark_gray><st>              </st> <#49d6a0><bold>Donut Teams</bold></#49d6a0> <dark_gray><st>              </st>"
+  lines:
+    - "<white>/team</white> <dark_gray>·</dark_gray> <gray>open the team menu"
+    - "<white>/team create <name> [tag]</white> <dark_gray>·</dark_gray> <gray>start a team"
+    - "<white>/team invite <player></white> <dark_gray>·</dark_gray> <gray>invite someone"
+    - "<white>/team join <team></white> <dark_gray>·</dark_gray> <gray>accept an invite or join an open team"
+    - "<white>/team request <team></white> <dark_gray>·</dark_gray> <gray>ask to join"
+    - "<white>/team chat [message]</white> <dark_gray>·</dark_gray> <gray>team chat (also <white>/tc</white>)"
+    - "<white>/team allychat [message]</white> <dark_gray>·</dark_gray> <gray>ally chat (also <white>/ac</white>)"
+    - "<white>/team home [name]</white> <dark_gray>·</dark_gray> <gray>teleport to a team home"
+    - "<white>/team sethome [name]</white> <dark_gray>·</dark_gray> <gray>set a team home"
+    - "<white>/team bank</white> <dark_gray>·</dark_gray> <gray>deposit, withdraw, history"
+    - "<white>/team chest</white> <dark_gray>·</dark_gray> <gray>the shared team chest"
+    - "<white>/team ally|enemy|neutral <team></white> <dark_gray>·</dark_gray> <gray>diplomacy"
+    - "<white>/team promote|demote|kick <player></white> <dark_gray>·</dark_gray> <gray>manage members"
+    - "<white>/team top</white> <dark_gray>·</dark_gray> <gray>leaderboards · <white>/team list</white> all teams"
+    - "<white>/team info [team]</white> <dark_gray>·</dark_gray> <gray>team details"
+  footer: "<dark_gray>Hover the menu items for more · <gray>/team help"
 
 create:
-  usage: "/team create <name> [tag]"
-  created: "<green>Created team <white><team></white> <gray>[<white><tag></white>]</gray>."
-  exists: "<red>A team named <white><team></white> already exists."
-  invalid-name: "<red>Team names must be <white><min></white>–<white><max></white> letters, numbers, or underscores."
-  invalid-tag: "<red>Tags must be <white><min></white>–<white><max></white> letters or numbers."
-  no-permission: "<red>You cannot create a team."
-  prompt: "<gray>Type a team name in chat, or <white>cancel</white>."
+  created: "<green>You founded <team_display> <tag_display><green>! Invite friends with <white>/team invite \\<player></white>."
+  announce: "<gray>✦ <white><player></white> founded the team <team_display><gray>."
+  exists: "<red>A team called <white><team></white> already exists."
+  invalid-name: "<red>Team names are <white><min></white>–<white><max_length></white> letters, numbers or underscores."
+  invalid-tag: "<red>Tags are <white><tag_min></white>–<white><tag_max></white> letters or numbers."
+  blocked: "<red>That name isn't allowed."
+  no-permission: "<red>You can't create a team."
+  cannot-afford: "<red>Creating a team costs <white><cost></white>."
+  paid: "<gray>Paid <white><cost></white> to found the team."
 
 disband:
-  disbanded: "<red>Team <white><team></white> was disbanded."
-  confirm: "<yellow>Click again or run <white>/team disband confirm</white> to disband <white><team></white>."
+  confirm: "<red>Disband <team_display><red>? Members are removed; the bank goes to you and the chest items to your inventory. <confirm>"
+  disbanded: "<red>The team <white><team></white> was disbanded."
+  announce: "<gray>✦ The team <white><team></white> was disbanded."
+  refund: "<green>The team bank paid you <white><amount></white>."
+  chest-returned: "<green><white><count></white> stacks from the team chest went to your inventory."
 
 invite:
-  usage: "/team invite <player>"
-  sent: "<green>Invited <white><player></white> to <white><team></white>."
-  received: "<green><player></green> invited you to <white><team></white>. Use <white>/team join <team></white>."
-  already: "<red>That player is already invited or in a team."
-  self: "<red>You cannot invite yourself."
-  full: "<red>Your team is full (<white><max></white> members)."
+  sent: "<green>Invited <white><player></white> to <team_display><green>."
+  received: "<gold><white><player></white> invited you to <team_display> <tag_display><gold>. <accept> <decline>"
+  pending: "<gold>You have <white><count></white> team invite(s). <open>"
+  already: "<red><white><player></white> is already invited or in a team."
+  self: "<red>You can't invite yourself."
+  full: "<red>Your team is full (<white><max></white> members). Level up for more room."
+  revoked: "<yellow>Took back the invite to <white><player></white>."
+  declined: "<yellow>You declined the invite to <team_display><yellow>."
+  declined-notify: "<yellow><white><player></white> declined your invite."
 
 join:
-  usage: "/team join <team>"
-  joined: "<green><player></green> joined <white><team></white>."
-  no-invite: "<red>You do not have an invite to <white><team></white>."
+  welcome: "<green>Welcome to <team_display> <tag_display><green>! <gray>Type <white>/team</white> for the menu."
+  joined: "<green><white><player></white> joined the team!"
+  no-invite: "<red><team_display> <red>is invite only. <request>"
+  no-invite-plain: "<red>You don't have an invite to <white><team></white>."
   expired: "<red>That invite has expired."
-  full: "<red>That team is full."
+  full: "<red><team_display> <red>is full."
+
+request:
+  sent: "<green>Asked <team_display> <green>to let you in. Their officers have been told."
+  received: "<gold><white><player></white> wants to join the team. <accept> <deny>"
+  already: "<yellow>You already asked <team_display><yellow>; wait for an answer."
+  accepted: "<green>Your request was accepted!"
+  denied: "<yellow>Turned <white><player></white> away."
+  denied-target: "<red><team_display> <red>turned down your request."
+  none: "<red>No request from <white><player></white>."
 
 leave:
-  left: "<yellow>You left <white><team></white>."
-  owner: "<red>Owners must <white>/team transfer</white> or <white>/team disband</white> first."
-  broadcast: "<yellow><player></yellow> left <white><team></white>."
+  left: "<yellow>You left <team_display><yellow>."
+  broadcast: "<yellow><white><player></white> left the team."
+  owner: "<red>Owners can't leave. <white>/team transfer \\<player></white> or <white>/team disband</white>."
 
 kick:
-  usage: "/team kick <player>"
-  kicked: "<red><player></red> was kicked from <white><team></white>."
-  target: "<red>You were kicked from <white><team></white>."
-  not-member: "<red>That player is not on your team."
-  cannot-owner: "<red>You cannot kick the owner."
+  kicked: "<red><white><player></white> was kicked from the team."
+  target: "<red>You were kicked from <team_display><red>."
 
-info:
-  header: "<gold><bold><team></bold></gold> <gray>[<white><tag></white>]</gray>"
-  owner: "<gray>Owner: <white><owner>"
-  members: "<gray>Members: <white><count></white>/<white><max>"
-  pvp: "<gray>Friendly fire: <white><state>"
-  home: "<gray>Home: <white><home>"
-  none: "<dark_gray>none"
+promote:
+  promoted: "<green><white><player></white> is now <role><green>."
+  highest: "<red><white><player></white> can't be promoted further. <gray>(Owner changes with /team transfer.)"
 
-chat:
-  usage: "/team chat [message]"
-  enabled: "<green>Team chat enabled."
-  disabled: "<yellow>Team chat disabled."
-  format: "<dark_gray>[<gold><tag></gold>]</dark_gray> <white><player></white><dark_gray>:</dark_gray> <gray><message>"
-  no-speak: "<red>You do not have team chat permission."
-  empty: "<red>Your team has no one else online."
-
-home:
-  none: "<red>Your team has no home set."
-  warmup: "<yellow>Teleporting to team home in <white><seconds></white>s. Don't move."
-  actionbar: "<gold>Team home in <white><seconds></white>s"
-  teleported: "<green>Teleported to the team home."
-  cancelled-move: "<red>Teleport cancelled because you moved."
-  cancelled: "<red>Teleport cancelled."
-  invalid-world: "<red>The team home world is not loaded."
-  no-permission: "<red>You cannot use the team home."
-
-sethome:
-  set: "<green>Team home set."
-  no-permission: "<red>You cannot set the team home."
-
-delhome:
-  deleted: "<yellow>Team home removed."
-  none: "<red>Your team has no home to delete."
-  no-permission: "<red>You cannot delete the team home."
-
-pvp:
-  enabled: "<red>Friendly fire is now <white>ON</white>."
-  disabled: "<green>Friendly fire is now <white>OFF</white>."
-  no-permission: "<red>You cannot toggle team PvP."
+demote:
+  demoted: "<yellow><white><player></white> is now <role><yellow>."
+  lowest: "<red><white><player></white> is already the lowest rank."
 
 transfer:
-  usage: "/team transfer <player>"
-  transferred: "<green>Ownership of <white><team></white> transferred to <white><player></white>."
-  not-member: "<red>That player is not on your team."
+  confirm: "<gold>Make <white><player></white> the owner of <team_display><gold>? You become an officer. <confirm>"
+  transferred: "<gold><white><player></white> is the new owner of <team_display><gold>."
 
-gui:
-  title-main: "<gold>Donut Teams"
-  title-members: "<gold>Team Members"
-  title-member: "<gold>Member · <white><player>"
-  title-invites: "<gold>Team Invites"
-  title-settings: "<gold>Team Settings"
-  filler-name: "<dark_gray> "
-  create-name: "<green>Create team"
-  create-lore:
-    - "<gray>Click, then type a name in chat"
-    - "<dark_gray>or use /team create <name>"
-  info-name: "<aqua>Team info"
-  members-name: "<yellow>Members"
-  invites-name: "<gold>Invites"
-  settings-name: "<white>Settings"
-  home-name: "<green>Team home"
-  sethome-name: "<aqua>Set home"
-  delhome-name: "<red>Delete home"
-  chat-name: "<light_purple>Team chat"
-  pvp-name: "<red>Friendly fire"
-  leave-name: "<red>Leave team"
-  disband-name: "<dark_red>Disband team"
-  back-name: "<gray>Back"
-  close-name: "<red>Close"
-  pvp-on: "<green>ON"
-  pvp-off: "<red>OFF"
-  chat-on: "<green>ON"
-  chat-off: "<gray>OFF"
-  home-set: "<green>Set"
-  home-unset: "<dark_gray>Not set"
-  owner-badge: "<gold>Owner"
-  member-badge: "<gray>Member"
-  toggle-perm: "<yellow>Click to toggle <white><perm>"
-  kick-name: "<red>Kick"
-  transfer-name: "<gold>Transfer ownership"
-  pro-locked: "<dark_gray>NightTeams Pro"
-  pro-allies: "<gray>Allies / wars"
-  pro-bank: "<gray>Team bank"
-  pro-homes: "<gray>Extra / personal homes"
-  pro-cosmetics: "<gray>Nametags / tablist"
-  pro-lore: "<dark_gray>Available in NightTeams Pro"
+settings:
+  renamed: "<green>The team is now <team_display> <tag_display><green>."
+  description: "<green>Description updated."
+  motd: "<green><white><player></white> set the message of the day: <white><motd>"
+  color: "<green>Team colour set to <team_display><green>."
+  icon: "<green>Team icon set to <white><item></white>."
+  icon-empty: "<red>Hold the item you want as the icon (a banner looks great)."
+  opened: "<green><white><player></white> opened the team: anyone can <white>/team join <team></white>."
+  closed: "<yellow><white><player></white> made the team invite only."
+
+pvp:
+  enabled: "<red>Friendly fire is now <bold>ON</bold>. <gray>(<white><player></white>)"
+  disabled: "<green>Friendly fire is now <bold>OFF</bold>. <gray>(<white><player></white>)"
+  ally-enabled: "<red>Ally damage is now <bold>ON</bold>. <gray>(<white><player></white>)"
+  ally-disabled: "<green>Ally damage is now <bold>OFF</bold>. <gray>(<white><player></white>)"
+  blocked: "<red>Friendly fire is off: you can't hurt <white><player></white>."
+  ally-blocked: "<aqua><white><player></white> is an ally."
+
+motd:
+  show: "<dark_gray>[<team_display><dark_gray>]</dark_gray> <gold>MOTD</gold> <dark_gray>»</dark_gray> <white><motd>"
+
+notify:
+  online: "<dark_gray>[<green>+</green>]</dark_gray> <gray><white><player></white> is online."
+  offline: "<dark_gray>[<red>-</red>]</dark_gray> <gray><white><player></white> went offline."
+
+info:
+  header: "<dark_gray><st>          </st> <team_display> <tag_display> <dark_gray><st>          </st>"
+  lines:
+    - "<gray><italic><description>"
+    - "<gray>Owner <white><owner></white> <dark_gray>·</dark_gray> Level <white><level></white>/<white><max_level></white> <dark_gray>·</dark_gray> <open>"
+    - "<gray>Members <white><members></white>/<white><max_members></white> <dark_gray>(<green><online> online</green>)</dark_gray>"
+    - "<gray>Kills <white><kills></white> <dark_gray>·</dark_gray> Deaths <white><deaths></white> <dark_gray>·</dark_gray> KDR <white><kdr></white>"
+    - "<gray>Bank <white><balance></white> <dark_gray>·</dark_gray> Homes <white><homes></white>/<white><max_homes></white>"
+    - "<gray>Allies <aqua><ally_list></aqua> <dark_gray>·</dark_gray> Enemies <red><enemy_list></red>"
+    - "<gray>Roster <white><roster>"
+  relation: "<gray>Relation: <relation>"
+
+chat:
+  format: "<dark_gray>[</dark_gray><#49d6a0>Team</#49d6a0><dark_gray>]</dark_gray> <role> <white><player></white><dark_gray>:</dark_gray> <#bff5df><message>"
+  ally-format: "<dark_gray>[</dark_gray><aqua>Ally</aqua><dark_gray>]</dark_gray> <tag_display> <white><player></white><dark_gray>:</dark_gray> <#c4ecff><message>"
+  spy-format: "<dark_gray>[Spy]</dark_gray> <message>"
+  enabled: "<green>Team chat <bold>ON</bold>: your messages go to your team. <gray>/team chat</gray> again to stop."
+  disabled: "<yellow>Team chat off: back to public chat."
+  ally-enabled: "<aqua>Ally chat <bold>ON</bold>: your messages go to your team and allies."
+  ally-disabled: "<yellow>Ally chat off: back to public chat."
+  no-allies: "<red>Your team has no allies yet."
+  spy-on: "<green>Chat spy on."
+  spy-off: "<yellow>Chat spy off."
+
+home:
+  set: "<green><white><player></white> set the team home <white><home></white> at <white><coords></white>."
+  deleted: "<yellow><white><player></white> deleted the team home <white><home></white>."
+  none: "<red>Your team has no home yet. <gray>Set one with <white>/team sethome</white>."
+  not-found: "<red>No team home called <white><home></white>."
+  invalid-name: "<red>Home names are up to 16 letters, numbers, - or _."
+  limit: "<red>Your team has all <white><max_homes></white> homes it can have. Level up for more."
+  limit-one: "<red>Your team can have one home; move it with <white>/team sethome <home></white>."
+  disabled-world: "<red>Team homes don't work in this world."
+  invalid-world: "<red>That home's world (<white><world></white>) isn't loaded."
+  cooldown: "<red>Wait <white><time></white> before going home again."
+  warmup: "<yellow>Teleporting to <white><home></white> in <white><seconds>s</white>. Don't move!"
+  actionbar: "<#49d6a0>Teleporting to <white><home></white> in <white><bold><seconds></bold></white>..."
+  title: "<#49d6a0><bold><seconds>"
+  subtitle: "<gray>to team home <white><home>"
+  teleported: "<green>Welcome to <white><home></white>."
+  cancelled-move: "<red>Teleport cancelled: you moved."
+  cancelled-damage: "<red>Teleport cancelled: you took damage."
+  cancelled: "<red>Teleport cancelled."
+
+bank:
+  balance: "<gray>Team bank: <green><balance>"
+  deposited: "<green><white><player></white> deposited <white><amount></white>. <gray>Bank: <white><balance>"
+  withdrew: "<yellow><white><player></white> withdrew <white><amount></white>. <gray>Bank: <white><balance>"
+  cannot-afford: "<red>You don't have <white><amount></white>."
+  team-cannot-afford: "<red>The bank only has <white><balance></white>."
+  max-balance: "<red>The team bank can hold at most <white><max></white>."
+  no-economy: "<red>The team bank needs Vault and an economy plugin."
+
+level:
+  upgraded: "<gold><bold>LEVEL UP!</bold> <white><player></white> raised <team_display> <gold>to level <white><level></white>."
+  perks: "<gray>Now: <white><max_members></white> members · <white><max_homes></white> homes · <white><chest_rows></white> chest rows."
+  max: "<yellow><team_display> <yellow>is at the top level."
+  cannot-afford: "<red>The next level costs <white><cost></white>; the bank has <white><balance></white>."
+
+chest:
+  title: "<dark_gray>Team Chest · <team_display>"
+  in-use: "<red><white><player></white> is using the team chest. Try again in a moment."
+  in-use-disband: "<red>Someone is using the team chest; try again when it's closed."
+
+relations:
+  self: "<red>That's your own team."
+  request-sent: "<aqua><white><player></white> asked <team_display> <aqua>to become allies."
+  request-received: "<aqua><team_display> <aqua>wants to be allies. <accept>"
+  request-pending: "<yellow>You already asked <team_display><yellow>; waiting for them."
+  allied: "<aqua><bold>ALLIANCE!</bold> You are now allied with <team_display><aqua>."
+  alliance-ended: "<yellow>The alliance with <team_display> <yellow>has ended."
+  enemy-declared: "<red><bold>WAR!</bold> Your team declared <team_display> <red>an enemy."
+  enemy-received: "<red><bold>WAR!</bold> <team_display> <red>declared your team an enemy."
+  neutral: "<gray>Your team is now neutral towards <team_display><gray>."
+  already-allies: "<yellow>You're already allied with <team_display><yellow>."
+  already-enemies: "<yellow><team_display> <yellow>is already an enemy."
+  already-neutral: "<yellow>You're already neutral towards <team_display><yellow>."
+  max-allies: "<red>Your team has the most allies allowed (<white><max></white>)."
+  other-max-allies: "<red><team_display> <red>already has the most allies allowed."
+
+prompt:
+  hint: "<dark_gray>Type your answer in chat, or <cancel><dark_gray>."
+  cancelled: "<yellow>Cancelled."
+  create: "<#49d6a0>Type a name for your team <gray>(and a tag after it, like <white>Nightbeam NB</white>)."
+  invite: "<#49d6a0>Type the name of the player to invite."
+  rename: "<#49d6a0>Type the new team name."
+  tag: "<#49d6a0>Type the new team tag."
+  description: "<#49d6a0>Type the team description <gray>(<white>clear</white> to remove)."
+  motd: "<#49d6a0>Type the message of the day <gray>(<white>clear</white> to remove)."
+  home-name: "<#49d6a0>Type a name for the new home."
+  deposit: "<#49d6a0>How much to deposit? <gray>(e.g. <white>500</white>, <white>2.5k</white>)"
+  withdraw: "<#49d6a0>How much to withdraw?"
+  ally: "<#49d6a0>Type the name of the team to ally with."
+  enemy: "<#49d6a0>Type the name of the team to declare an enemy."
+  join: "<#49d6a0>Type the name of the team to join or ask."
+
+dialog:
+  create-title: "Create a team"
+  create-name: "Team name"
+  create-tag: "Tag (optional)"
+  confirm: "Create"
+  cancel: "Cancel"
+  text-title: "Donut Teams"
+  text-field: "Your answer"
+  submit: "Done"
+
+admin:
+  usage: "<gray>Usage: <white>/donutteams <reload|info|disband|join|kick|setowner|rename|bank|level|chest|spy|board|purge|version>"
+  reload: "<green>Donut Teams reloaded (config, messages, menus)."
+  disbanded: "<green>Disbanded <white><team></white>."
+  joined: "<green>Put <white><player></white> in <team_display><green>."
+  already-in-team: "<red><white><player></white> is already in <white><team></white>."
+  not-in-team: "<red><white><player></white> isn't in a team."
+  kick-owner: "<red><white><player></white> owns <white><team></white>: set a new owner first."
+  already-owner: "<red><white><player></white> already owns the team."
+  balance: "<green><team_display> <green>bank is now <white><balance></white>."
+  level: "<green><team_display> <green>is now level <white><level></white>."
+  chest: "<gray>Viewing the chest of <team_display><gray> (changes are saved)."
+  board-created: "<green>Board <white><board></white> created here showing <white><stat></white>."
+  board-deleted: "<yellow>Board <white><board></white> removed."
+  board-exists: "<red>A board called <white><board></white> exists, or the name is invalid."
+  board-missing: "<red>No board called <white><board></white>."
+  board-list: "<gray>Boards: <white><boards>"
+  purge-preview: "<yellow><white><count></white> teams have had nobody online for <white><days></white> days: <gray><teams></gray>. Add <white>confirm</white> to disband them."
+  purged: "<green>Disbanded <white><count></white> teams inactive for <white><days></white> days."
+  version: "<gray>Donut Teams <white><version></white> on <white><platform></white> · storage <white><storage></white> · economy <white><economy></white>"
+  update: "<gold>Donut Teams <white><latest></white> is out (you have <white><version></white>): <white><url>"
+
+board:
+  title: "<#49d6a0><bold>TOP TEAMS</bold></#49d6a0> <dark_gray>·</dark_gray> <white><stat_name>"
+  entry: "<gray>#<rank></gray> <team_display> <dark_gray>·</dark_gray> <white><value>"
+  entry-top: "<gold>#<rank></gold> <team_display> <dark_gray>·</dark_gray> <yellow><value>"
+  empty: "<gray>No teams yet. <white>/team create</white>!"
+  footer: "<dark_gray>/team top"
+
+menu:
+  chat-public: "<gray>Public chat"
+  chat-team: "<#49d6a0>Team chat"
+  chat-ally: "<aqua>Ally chat"
+  manage-hint: "<yellow>Click to manage"
+  confirm-disband: "Disband <team>?"
+  confirm-disband-detail: "The bank goes to you, chest items to your inventory."
+  confirm-leave: "Leave <team>?"
+  confirm-leave-detail: "You'll need a new invite to come back."
+  confirm-kick: "Kick <player>?"
+  confirm-kick-detail: "They can be invited again later."
+  confirm-transfer: "Give the team to <player>?"
+  confirm-transfer-detail: "You become an officer."
+
+stats:
+  kills: "Kills"
+  balance: "Bank"
+  level: "Level"
+  members: "Members"
 
 placeholders:
-  none: "none"
+  none: ""
+  no-team: "No team"

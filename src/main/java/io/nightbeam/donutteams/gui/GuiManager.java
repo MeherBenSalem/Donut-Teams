@@ -1,117 +1,140 @@
 package io.nightbeam.donutteams.gui;
 
 import io.nightbeam.donutteams.DonutTeamsPlugin;
-import io.nightbeam.donutteams.config.Messages;
 import io.nightbeam.donutteams.model.Team;
-import io.nightbeam.donutteams.scheduler.FoliaScheduler;
-import io.nightbeam.donutteams.service.ChatService;
-import io.nightbeam.donutteams.service.HomeWarmupService;
-import io.nightbeam.donutteams.service.TeamService;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import io.nightbeam.donutteams.service.ChestService;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 
+/** Opens menus and routes their clicks; also watches team chests for saving. */
 public final class GuiManager implements Listener {
 
     private final DonutTeamsPlugin plugin;
-    private final Messages messages;
-    private final FoliaScheduler scheduler;
-    private final TeamService teams;
-    private final ChatService chat;
-    private final HomeWarmupService homes;
-    private final Map<UUID, Long> disbandConfirm = new ConcurrentHashMap<>();
+    private final MenuConfig config = new MenuConfig();
 
-    public GuiManager(
-            DonutTeamsPlugin plugin,
-            Messages messages,
-            FoliaScheduler scheduler,
-            TeamService teams,
-            ChatService chat,
-            HomeWarmupService homes
-    ) {
+    public GuiManager(DonutTeamsPlugin plugin) {
         this.plugin = plugin;
-        this.messages = messages;
-        this.scheduler = scheduler;
-        this.teams = teams;
-        this.chat = chat;
-        this.homes = homes;
     }
 
+    public MenuConfig config() {
+        return config;
+    }
+
+    /** The team menu, or the "no team" menu. */
     public void openMain(Player player) {
-        open(player, new TeamMainGui(this, messages, teams, chat));
+        Team team = plugin.teams().teamByPlayer(player.getUniqueId());
+        if (team == null) {
+            new NoTeamMenu(plugin, player).open();
+        } else {
+            new MainMenu(plugin, player).open();
+        }
+    }
+
+    private boolean inTeam(Player player) {
+        return plugin.teams().requireTeam(player) != null;
     }
 
     public void openMembers(Player player) {
-        open(player, new MembersGui(this, messages, teams));
-    }
-
-    public void openMember(Player player, UUID targetId) {
-        open(player, new MemberEditGui(this, messages, teams, targetId));
+        if (inTeam(player)) {
+            new MembersMenu(plugin, player).open();
+        }
     }
 
     public void openInvites(Player player) {
-        open(player, new InvitesGui(this, messages, teams));
+        new InvitesMenu(plugin, player).open();
+    }
+
+    public void openRequests(Player player) {
+        if (inTeam(player)) {
+            new RequestsMenu(plugin, player).open();
+        }
+    }
+
+    public void openHomes(Player player) {
+        if (inTeam(player)) {
+            new HomesMenu(plugin, player).open();
+        }
+    }
+
+    public void openBank(Player player) {
+        if (inTeam(player)) {
+            new BankMenu(plugin, player).open();
+        }
+    }
+
+    public void openLevels(Player player) {
+        if (inTeam(player)) {
+            new LevelMenu(plugin, player).open();
+        }
+    }
+
+    public void openRelations(Player player) {
+        if (inTeam(player)) {
+            new RelationsMenu(plugin, player).open();
+        }
     }
 
     public void openSettings(Player player) {
-        open(player, new SettingsGui(this, messages, teams));
-    }
-
-    public void open(Player player, BaseGui gui) {
-        scheduler.runForEntity(player, () -> player.openInventory(gui.render(player)));
-    }
-
-    public TeamService teams() {
-        return teams;
-    }
-
-    public ChatService chat() {
-        return chat;
-    }
-
-    public HomeWarmupService homes() {
-        return homes;
-    }
-
-    public DonutTeamsPlugin plugin() {
-        return plugin;
-    }
-
-    public boolean confirmDisband(Player player) {
-        long now = System.currentTimeMillis();
-        Long last = disbandConfirm.get(player.getUniqueId());
-        if (last != null && now - last < 8_000L) {
-            disbandConfirm.remove(player.getUniqueId());
-            return true;
+        if (inTeam(player)) {
+            new SettingsMenu(plugin, player).open();
         }
-        disbandConfirm.put(player.getUniqueId(), now);
-        return false;
     }
 
-    @EventHandler
+    public void openColors(Player player) {
+        if (inTeam(player)) {
+            new ColorMenu(plugin, player).open();
+        }
+    }
+
+    public void openBrowse(Player player) {
+        new BrowseMenu(plugin, player).open();
+    }
+
+    public void openTop(Player player, io.nightbeam.donutteams.service.TopService.Stat stat) {
+        new TopMenu(plugin, player, stat).open();
+    }
+
+    public void openProfile(Player player, Team team) {
+        new ProfileMenu(plugin, player, team.id(), () -> new BrowseMenu(plugin, player).open()).open();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
-        if (!(event.getInventory().getHolder() instanceof BaseGui gui)) {
+        if (event.getView().getTopInventory().getHolder(false) instanceof ChestService.Holder) {
+            plugin.chests().markDirty(event.getView().getTopInventory());
+            return;
+        }
+        if (!(event.getView().getTopInventory().getHolder(false) instanceof Menu menu)) {
             return;
         }
         event.setCancelled(true);
         if (event.getClickedInventory() == null || event.getClickedInventory() != event.getView().getTopInventory()) {
             return;
         }
-        gui.handleClick(player, event);
+        if (menu.viewer.getUniqueId().equals(player.getUniqueId())) {
+            menu.click(event.getRawSlot(), event.getClick());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDrag(InventoryDragEvent event) {
+        if (event.getView().getTopInventory().getHolder(false) instanceof Menu) {
+            event.setCancelled(true);
+        } else if (event.getView().getTopInventory().getHolder(false) instanceof ChestService.Holder) {
+            plugin.chests().markDirty(event.getView().getTopInventory());
+        }
     }
 
     @EventHandler
-    public void onDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof BaseGui) {
-            event.setCancelled(true);
-        }
+    public void onClose(InventoryCloseEvent event) {
+        plugin.chests().onClose(event);
     }
 }

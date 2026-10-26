@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+/** Team chat, ally chat and prompt answers are taken out of public chat and handled on the player's thread. */
 public final class ChatListener implements Listener {
 
     private final ChatService chat;
@@ -22,18 +23,11 @@ public final class ChatListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onChat(AsyncChatEvent event) {
         Player player = event.getPlayer();
-        boolean pending = chat.hasPending(player.getUniqueId());
-        boolean toggled = chat.toggled(player.getUniqueId());
-        if (!pending && !toggled) {
+        String plain = PlainTextComponentSerializer.plainText().serialize(event.message());
+        if (!chat.wants(player, plain)) {
             return;
         }
         event.setCancelled(true);
-        String plain = PlainTextComponentSerializer.plainText().serialize(event.message());
-        scheduler.runForEntity(player, () -> {
-            if (chat.handleInput(player, plain)) {
-                return;
-            }
-            chat.handleToggledChat(player, event.message());
-        });
+        scheduler.runForEntity(player, () -> chat.handle(player, plain));
     }
 }

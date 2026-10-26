@@ -5,6 +5,10 @@ import java.util.UUID;
 public record TeamInvite(UUID teamId, UUID playerId, UUID invitedBy, long expiresAtMillis) {
 
     public boolean expired() {
-        return System.currentTimeMillis() > expiresAtMillis;
+        return expired(System.currentTimeMillis());
+    }
+
+    public boolean expired(long now) {
+        return now > expiresAtMillis;
     }
 }
