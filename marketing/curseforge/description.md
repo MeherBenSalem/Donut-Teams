@@ -225,6 +225,6 @@ supports relational placeholders.
 
 ![divider](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/divider.png)
 
-**Discord**: [discord.gg/SAmd9fhNhr](https://discord.gg/SAmd9fhNhr) · **Source**:
+**Discord**: [discord.gg/TJc3CxR4jK](https://discord.gg/TJc3CxR4jK) · **Source**:
 [GitHub](https://github.com/MeherBenSalem/Donut-Teams) (Apache 2.0) · **Support the project**:
 [nightbeam.dev/support](https://nightbeam.dev/support)

@@ -15,6 +15,10 @@ Image links in the description point at `raw.githubusercontent.com/MeherBenSalem
 so they work once this folder is on `main`. To host on CurseForge instead, upload the images to the project gallery and
 replace each URL.
 
+**Modrinth**: the *Sync Modrinth listing* workflow (`.github/workflows/listing.yml`, run by hand) sets the summary,
+description, icon and gallery from these files. **CurseForge** has no API for the description: paste `description.md`
+into the project's description editor (Markdown) and `summary.txt` into its summary.
+
 The artwork shares the pixel donut, fonts and dark backdrop of the other Donut plugins (DonutRTP, DonutAuctionHouse,
 DonutShards, DonutOrders). Donut Teams' donut has mint icing.
 
