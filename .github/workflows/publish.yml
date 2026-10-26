@@ -55,6 +55,21 @@ jobs:
             exit 1
           fi
 
+      # A tag pushed after the version was published by hand must not upload it twice.
+      - name: Check whether this version is out already
+        id: published
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          MODRINTH_ID: ${{ vars.MODRINTH_ID }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        shell: bash
+        run: |
+          if curl -fsS "https://api.modrinth.com/v2/project/${MODRINTH_ID}/version" \
+              | jq -e --arg v "$VERSION" 'any(.[]; .version_number == $v)' > /dev/null; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "$VERSION is already on Modrinth: nothing to upload."
+          fi
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -89,7 +104,7 @@ jobs:
           node-version: "20"
 
       - name: Upload Modrinth + CurseForge
-        if: ${{ inputs.dry_run != 'true' }}
+        if: ${{ inputs.dry_run != 'true' && steps.published.outputs.already != 'true' }}
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
