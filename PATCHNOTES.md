@@ -15,7 +15,7 @@ A full rewrite. The full notes are in [DonutTeams-2.0.0-PatchNotes.md](DonutTeam
 * **Every feature in menus**, all configurable in `menus.yml`, and **native input dialogs** on 1.21.7+.
 * Team colour, icon, tag, description and message of the day; staff tools, chat spy and inactive-team purge.
 * PlaceholderAPI (including relational placeholders), LuckPerms contexts, MariaDB/MySQL, eight new API events.
-* Paper, Folia and Purpur **1.20.1 to 26.3** in one jar, tested by bots on every version.
+* Paper, Folia and Purpur **1.20.1 to 26.3** in one jar, played by bots on 15 servers across that range.
 * Fixes: public chat lost after leaving a team with team chat on, expired invites blocking new ones, underscores in
   names, a possible two-second freeze when inviting, and more.
 * 1.x teams, members, homes and settings upgrade themselves on the first start.

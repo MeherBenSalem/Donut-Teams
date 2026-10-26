@@ -1,0 +1,1 @@
+Free team plugin for Paper, Folia and Purpur 1.20.1-26.3: ranks, allies and enemies, a team bank, levels, a shared chest, named homes, leaderboards and floating boards, menus for everything, native dialogs, PlaceholderAPI.

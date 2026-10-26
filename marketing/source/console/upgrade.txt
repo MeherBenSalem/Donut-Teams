@@ -1,0 +1,6 @@
+[DonutTeams] Upgrading the 1.x database to 2.0 (teams, members, invites and homes are kept)
+[DonutTeams] Gave 1 member from 1.x the 2.0 permissions of their rank.
+[DonutTeams] Upgraded config.yml from 1.x (the old file is config-1.x.yml).
+[DonutTeams] messages.yml was replaced with the 2.0 version (your 1.x file is messages-1.x.yml).
+[DonutTeams] Your 1.x teams, members, invites and homes were kept. The old home is now called "home".
+[DonutTeams] Donut Teams 2.0.0 enabled on Paper 1.21.11: 1 team, storage SQLite, economy none, dialogs true, PlaceholderAPI false, LuckPerms contexts false, DonutCore false.
