@@ -1,5 +1,12 @@
 # Donut Teams Patch Notes
 
+## 2.0.1
+
+* **Menu click limit:** clicks closer together than `menus.click-cooldown-ms` (default 150 ms) are ignored, per
+  player, so autoclicking a menu button can no longer raise the server's MSPT. `0` turns it off.
+
+---
+
 ## 2.0.0: The Alliance Update
 
 A full rewrite. The full notes are in [DonutTeams-2.0.0-PatchNotes.md](DonutTeams-2.0.0-PatchNotes.md).

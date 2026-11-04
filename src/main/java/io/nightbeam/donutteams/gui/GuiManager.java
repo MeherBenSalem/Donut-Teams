@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import io.nightbeam.donutteams.util.ClickLimiter;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -16,6 +17,7 @@ public final class GuiManager implements Listener {
 
     private final DonutTeamsPlugin plugin;
     private final MenuConfig config = new MenuConfig();
+    private final ClickLimiter clicks = new ClickLimiter();
 
     public GuiManager(DonutTeamsPlugin plugin) {
         this.plugin = plugin;
@@ -103,6 +105,15 @@ public final class GuiManager implements Listener {
         new ProfileMenu(plugin, player, team.id(), () -> new BrowseMenu(plugin, player).open()).open();
     }
 
+    private boolean acceptClick(java.util.UUID player) {
+        return clicks.accept(player, System.currentTimeMillis(), plugin.settings().clickCooldownMillis);
+    }
+
+    /** Forget a player's click time when they leave. */
+    public void forget(java.util.UUID player) {
+        clicks.forget(player);
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) {
@@ -119,7 +130,7 @@ public final class GuiManager implements Listener {
         if (event.getClickedInventory() == null || event.getClickedInventory() != event.getView().getTopInventory()) {
             return;
         }
-        if (menu.viewer.getUniqueId().equals(player.getUniqueId())) {
+        if (menu.viewer.getUniqueId().equals(player.getUniqueId()) && acceptClick(player.getUniqueId())) {
             menu.click(event.getRawSlot(), event.getClick());
         }
     }

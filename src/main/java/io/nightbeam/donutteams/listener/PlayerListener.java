@@ -33,6 +33,7 @@ public final class PlayerListener implements Listener {
         Player player = event.getPlayer();
         plugin.chat().clear(player.getUniqueId());
         plugin.homes().clear(player.getUniqueId());
+        plugin.guis().forget(player.getUniqueId());
         plugin.teams().onQuit(player);
     }
 

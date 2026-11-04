@@ -130,6 +130,9 @@ menus:
   # Use the native text-input dialogs of Minecraft 1.21.7+ for names and amounts where the server supports them,
   # instead of typing in chat.
   dialogs: true
+  # Ignore menu clicks that come faster than this (milliseconds), per player. Stops autoclickers from making
+  # the server rebuild menus and save data hundreds of times a second. 0 = no limit.
+  click-cooldown-ms: 150
 
 # Sounds: a sound name, optionally with volume and pitch ("BLOCK_NOTE_BLOCK_PLING 1 1.4"). Empty = silent.
 sounds:

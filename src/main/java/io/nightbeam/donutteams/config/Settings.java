@@ -82,6 +82,8 @@ public final class Settings {
     public final boolean motdOnJoin;
 
     public final boolean dialogs;
+    /** Minimum time between two clicks one player makes in a menu; faster clicks are ignored. 0 = no limit. */
+    public final long clickCooldownMillis;
 
     public final boolean updateCheck;
     public final boolean metrics;
@@ -160,6 +162,7 @@ public final class Settings {
         motdOnJoin = c.getBoolean("notifications.motd-on-join", true);
 
         dialogs = c.getBoolean("menus.dialogs", true);
+        clickCooldownMillis = Math.max(0, c.getLong("menus.click-cooldown-ms", 150));
 
         updateCheck = c.getBoolean("update-check.enabled", true);
         metrics = c.getBoolean("metrics.enabled", true);

@@ -35,6 +35,7 @@ class SettingsTest {
         assertTrue(settings.homeCancelOnMove);
         assertTrue(settings.chatEnabled);
         assertFalse(settings.defaultFriendlyFire);
+        assertEquals(150, settings.clickCooldownMillis);
         assertEquals(5, settings.levels.max());
         assertEquals(8, settings.levels.get(1).maxMembers());
         assertEquals(6, settings.levels.get(5).chestRows());
