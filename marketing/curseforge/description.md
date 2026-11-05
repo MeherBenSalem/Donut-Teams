@@ -1,5 +1,9 @@
 ![Donut Teams 2.0: The Alliance Update](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/banner.png)
 
+**[Discord](https://discord.gg/TJc3CxR4jK) · [Premium plugins](https://nightbeam.dev/store) · [Support NightBeam](https://nightbeam.dev/support) · [NightBeam Pro](https://nightbeam.dev/memberships) · [All projects](https://nightbeam.dev/projects)**
+
+> **Running a server?** NightBeam's premium plugins are on [BuiltByBit](https://nightbeam.dev/store): NightWatch Pro anti-cheat, Elo ranked leaderboards and more.
+
 ## Teams your players will actually build around
 
 **Donut Teams** is a free, open-source team plugin for Paper, Folia and Purpur, from Minecraft **1.20.1 to 26.3**.
@@ -45,7 +49,7 @@ every team or check the top teams.
 - **Twelve permissions**: invite, kick, use homes, set homes, team chat, friendly fire, deposit, withdraw, chest,
   diplomacy, settings and level up. Each rank has defaults in `config.yml`; the owner can switch any of them for any
   member.
-- Members can only kick, promote or demote ranks below their own. Ownership changes with `/team transfer`.
+- Members can kick, promote or demote ranks below their own, never above. Ownership changes with `/team transfer`.
 
 ![Allies & Enemies](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/header-allies.png)
 
@@ -146,7 +150,7 @@ All of these are optional:
 
 ![Upgrade in place](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/card-upgrade.png)
 
-Replace the jar and restart. Donut Teams upgrades your 1.x install on the first start:
+Replace the jar and restart. Donut Teams upgrades your 1.x install when it starts:
 - **Teams, members, invites and homes are kept.** The 1.x home is now called `home`; friendly fire settings stay.
 - `config.yml` keeps your values (the old file is saved as `config-1.x.yml`).
 - `messages.yml` is replaced with the new messages (yours is saved as `messages-1.x.yml`).
@@ -196,7 +200,7 @@ to disbanding it, including an upgrade from 1.0.1 and a restart. The console mus
 
 ![Questions](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/header-faq.png)
 
-**Does it need Vault?** Only for the bank, levels that cost money, and a create cost. Everything else works without
+**Does it need Vault?** Just for the bank, levels that cost money, and a create cost. Everything else works without
 it.
 
 **Folia?** Yes, every feature. The team chest is used by one player at a time on Folia.
@@ -209,7 +213,7 @@ supports relational placeholders.
 
 **Several servers?** Use one database per server. Teams shared across a network are NightTeams Pro's job.
 
-**Will my 1.x teams survive?** Yes. They are upgraded on the first start; back up `plugins/DonutTeams/` first anyway.
+**Will my 1.x teams survive?** Yes. They are upgraded when the new version starts; back up `plugins/DonutTeams/` beforehand anyway.
 
 ![Gallery](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/header-gallery.png)
 
@@ -225,6 +229,14 @@ supports relational placeholders.
 
 ![divider](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/divider.png)
 
-**Discord**: [discord.gg/TJc3CxR4jK](https://discord.gg/TJc3CxR4jK) · **Source**:
-[GitHub](https://github.com/MeherBenSalem/Donut-Teams) (Apache 2.0) · **Support the project**:
-[nightbeam.dev/support](https://nightbeam.dev/support)
+---
+
+### More from NightBeam Studio
+
+- **[Remnants: Ashen Legacy](https://www.curseforge.com/minecraft/modpacks/remnants-ashen-legacy)**: the story-driven soulslike RPG modpack built on NightBeam's mods
+- **[Premium server plugins](https://nightbeam.dev/store)**: anti-cheat, ranked PvP, SMP setups and more on BuiltByBit
+- **[NightBeam Pro](https://nightbeam.dev/memberships)**: the model library and NightBeam Forge credits, from $5 a month
+- **[Discord](https://discord.gg/TJc3CxR4jK)**: support, bug reports, suggestions and early looks
+- **[Support NightBeam](https://nightbeam.dev/support)**: help keep every mod free
+
+**Follow:** [YouTube](https://www.youtube.com/@nightbeamstudio) · [Instagram](https://www.instagram.com/nightbeamstudio/) · [X](https://x.com/NightBeamLLC) · [Facebook](https://www.facebook.com/profile.php?id=61574823331471) · [Source and issues](https://github.com/MeherBenSalem/Donut-Teams)
