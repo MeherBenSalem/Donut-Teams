@@ -343,6 +343,10 @@ relations:
       material: TEAM_ICON
       name: "<red><bold>Enemy</bold> <team_display> <tag_display>"
       lore: ["<gray>Members <white><members></white> · Level <white><level>", "", "<yellow>Right-click to make peace"]
+    enemy-of-us:
+      material: TEAM_ICON
+      name: "<red><bold>Enemy</bold> <team_display> <tag_display>"
+      lore: ["<gray>Members <white><members></white> · Level <white><level>", "<gray>They declared you an enemy.", "", "<yellow>Click to see their team"]
     request:
       material: TEAM_ICON
       name: "<gold><bold>Ally request</bold> <team_display>"

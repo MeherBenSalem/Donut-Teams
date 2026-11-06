@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 import org.bukkit.entity.Player;
 
-/** Allies, enemies and incoming ally requests. */
+/** Allies, enemies (declared by us or on us) and incoming ally requests. */
 final class RelationsMenu extends Menu {
 
     private record Entry(Team team, String kind) {
@@ -18,6 +18,12 @@ final class RelationsMenu extends Menu {
 
     RelationsMenu(DonutTeamsPlugin plugin, Player viewer) {
         super(plugin, viewer, "relations");
+    }
+
+    /** "enemy-of-us" is new in 2.0.2: menus.yml files from older versions don't have it, so fall back to "enemy". */
+    private io.nightbeam.donutteams.gui.MenuConfig.Item itemFor(String kind) {
+        var configured = item(kind);
+        return configured != null || !kind.equals("enemy-of-us") ? configured : item("enemy");
     }
 
     @Override
@@ -45,12 +51,20 @@ final class RelationsMenu extends Menu {
                 entries.add(new Entry(enemy, "enemy"));
             }
         }
-        paged(entries, entry -> render(item(entry.kind()), Icons.team(entry.team()), format().team(entry.team())), (entry, click) -> {
+        for (Team declarer : plugin.relations().declaredOn(team.id())) {
+            entries.add(new Entry(declarer, "enemy-of-us"));
+        }
+        paged(entries, entry -> render(itemFor(entry.kind()), Icons.team(entry.team()), format().team(entry.team())), (entry, click) -> {
             if (!manage) {
                 return;
             }
             switch (entry.kind()) {
                 case "request" -> plugin.relations().ally(viewer, entry.team().name());
+                case "enemy-of-us" -> {
+                    // They declared the war; only they can end it. Show who they are.
+                    new ProfileMenu(plugin, viewer, entry.team().id(), () -> new RelationsMenu(plugin, viewer).open()).open();
+                    return;
+                }
                 case "ally", "enemy" -> {
                     if (!click.isRightClick()) {
                         new ProfileMenu(plugin, viewer, entry.team().id(), () -> new RelationsMenu(plugin, viewer).open()).open();

@@ -1,5 +1,11 @@
 # Donut Teams Patch Notes
 
+## 2.0.2
+
+* **Enemies show on both sides:** the Allies & enemies menu now also lists teams that declared you an enemy.
+
+---
+
 ## 2.0.1
 
 * **Menu click limit:** clicks closer together than `menus.click-cooldown-ms` (default 150 ms) are ignored, per

@@ -188,6 +188,21 @@ public final class RelationService {
         return out;
     }
 
+    /**
+     * Teams that declared this team an enemy without it declaring them back. Declaring an enemy is one-sided
+     * (only the declaring team stores it), so without this the other team's menu never showed the war.
+     */
+    public List<Team> declaredOn(UUID teamId) {
+        Team mine = teams.teamById(teamId);
+        List<Team> out = new ArrayList<>();
+        for (Team team : teams.cache().teams()) {
+            if (!team.id().equals(teamId) && team.enemyOf(teamId) && (mine == null || !mine.enemyOf(team.id()))) {
+                out.add(team);
+            }
+        }
+        return out;
+    }
+
     public void forget(UUID teamId) {
         requests.values().removeIf(request -> request.fromTeam().equals(teamId) || request.toTeam().equals(teamId));
     }
