@@ -1,6 +1,6 @@
 ![Donut Teams 2.0: The Alliance Update](https://raw.githubusercontent.com/MeherBenSalem/Donut-Teams/main/marketing/images/banner.png)
 
-**[Discord](https://discord.gg/TJc3CxR4jK) · [Source and issues](https://github.com/MeherBenSalem/Donut-Teams)**
+**[Docs](https://nightbeam.dev/docs/donut-teams) · [Discord](https://discord.gg/TJc3CxR4jK) · [Source and issues](https://github.com/MeherBenSalem/Donut-Teams)**
 
 ## Teams your players will actually build around
 
