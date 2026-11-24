@@ -3,6 +3,8 @@ version: '${version}'
 main: io.nightbeam.donutteams.DonutTeamsPlugin
 api-version: '1.20'
 folia-supported: true
+# bStats plugin ID (Bukkit ignores this key; CI checks it matches BSTATS_ID in the code). 0 = no bStats page yet.
+bstats-id: 0
 authors:
   - Nightbeam Studio
 website: https://github.com/MeherBenSalem/Donut-Teams

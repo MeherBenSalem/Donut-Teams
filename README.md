@@ -33,6 +33,10 @@ instead of chat. One jar, Folia-safe throughout, SQLite or MariaDB/MySQL.
 - **Safe and fast**: every change is made in memory and saved in order on one database thread; Folia-safe region,
   entity and global scheduling; leaderboards are computed in the background, never on a player's request.
 
+Supported versions: Paper and Folia 1.20 to 26.3, Java 17+ (one jar for all of them).
+
+Metrics: bStats plugin ID not set yet (bStats is wired in but stays off until the plugin has a bStats page).
+
 ## Requirements
 
 - Paper, Folia, Purpur or another Paper fork, **1.20.1–26.3**. Plain Spigot/Bukkit lack Paper's API: the plugin says
@@ -168,6 +172,15 @@ Events (all cancellable): `TeamCreateEvent`, `TeamJoinEvent`, `TeamLeaveEvent`, 
 ```bash
 ./gradlew build            # the jar in build/libs, unit tests, and Folia-safety checks
 ./gradlew compileMatrix    # compile against every Paper API from 1.20.6 to 26.3
+./gradlew test             # only the JUnit 5 unit tests
+```
+
+CI (`.github/workflows/ci.yml`) runs the build, the unit tests and the API matrix on every push to `main`, then
+`python3 scripts/check_plugin_yml.py` (api-version `'1.20'`, `folia-supported`, the bStats ID and Java 17 bytecode in
+the built jar) and a smoke boot on Paper 1.20.1, Paper 26.3 and the newest Folia:
+
+```bash
+scripts/smoke_boot.sh paper 26.3 build/libs/DonutTeams-<version>.jar
 ```
 
 [`tools/smoke`](tools/smoke) boots real Paper and Folia servers from 1.20.1 to 26.3 and plays the plugin with bots,
