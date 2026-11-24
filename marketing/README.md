@@ -1,12 +1,12 @@
 # Marketing assets: 2.0 "The Alliance Update"
 
-Listing copy and artwork for CurseForge, Modrinth and Hangar. Nothing here ships in the plugin jar.
+Listing copy and artwork for CurseForge (releases are published there only) and Hangar. Nothing here ships in the plugin jar.
 
 ## Listing
 
 | File | Use |
 | --- | --- |
-| [`curseforge/description.md`](curseforge/description.md) | Full project description (Markdown; also works on Modrinth and Hangar) |
+| [`curseforge/description.md`](curseforge/description.md) | Full project description (Markdown; also works on Hangar) |
 | [`curseforge/summary.txt`](curseforge/summary.txt) | Short project summary |
 | [`images/icon.png`](images/icon.png) | Project avatar |
 | [`../DonutTeams-2.0.0-PatchNotes.md`](../DonutTeams-2.0.0-PatchNotes.md) | File changelog the publish workflow uploads |
@@ -15,9 +15,8 @@ Image links in the description point at `raw.githubusercontent.com/MeherBenSalem
 so they work once this folder is on `main`. To host on CurseForge instead, upload the images to the project gallery and
 replace each URL.
 
-**Modrinth**: the *Sync Modrinth listing* workflow (`.github/workflows/listing.yml`, run by hand) sets the summary,
-description, icon and gallery from these files. **CurseForge** has no API for the description: paste `description.md`
-into the project's description editor (Markdown) and `summary.txt` into its summary.
+**CurseForge** has no API for the description: paste `description.md` into the project's description editor (Markdown)
+and `summary.txt` into its summary.
 
 The artwork shares the pixel donut, fonts and dark backdrop of the other Donut plugins (DonutRTP, DonutAuctionHouse,
 DonutShards, DonutOrders). Donut Teams' donut has mint icing.
